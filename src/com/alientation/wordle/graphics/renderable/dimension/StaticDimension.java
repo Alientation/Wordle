@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import com.alientation.wordle.graphics.renderable.RenderableComponent;
 
-public class StaticDimension extends Dimension{
+public class StaticDimension implements Dimension{
 	public static StaticDimension MIN = new StaticDimension(0);
 	public static StaticDimension MAX = new StaticDimension(Integer.MAX_VALUE);
 	public static StaticDimension BASE = new StaticDimension(200);

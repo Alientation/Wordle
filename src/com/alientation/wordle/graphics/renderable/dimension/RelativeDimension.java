@@ -6,7 +6,7 @@ import com.alientation.wordle.graphics.renderable.RenderableComponent;
 import com.alientation.wordle.graphics.renderable.dimension.component.DimensionComponent;
 import com.alientation.wordle.util.Util;
 
-public class RelativeDimension extends Dimension {
+public class RelativeDimension implements Dimension {
 	private ArrayList<RenderableComponent> subreferences; //renderablecomponents that have this as a dimension
 	
 	private DimensionComponent relTo;
