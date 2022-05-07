@@ -1,2 +1,2 @@
 # Wordle
-wordle, but mainly a custom java graphics library
+Unfinished attempt at making a custom gui library to build wordle
