@@ -1,9 +1,9 @@
 package com.alientation.wordle;
 
-import com.alientation.wordle.graphics.Window;
-import com.alientation.wordle.graphics.font.PixelFont;
-import com.alientation.wordle.graphics.frames.MainFrame;
-import com.alientation.wordle.old.TextDisplayFrame_OLD;
+import com.alientation.gui.graphics.Window;
+import com.alientation.gui.graphics.font.PixelFont;
+import com.alientation.wordle.frames.MainFrame;
+import com.alientation.wordle.frames.old.TextDisplayFrame_OLD;
 import com.alientation.wordle.words.WordList;
 
 
