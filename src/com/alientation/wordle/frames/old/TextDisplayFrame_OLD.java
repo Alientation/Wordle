@@ -5,9 +5,9 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 import com.alientation.gui.graphics.font.PixelFont;
-import com.alientation.gui.graphics.renderable.Renderable_OLD;
+import com.alientation.gui.graphics.renderable.DeprecatedRenderable;
 
-public class TextDisplayFrame_OLD extends Renderable_OLD{
+public class TextDisplayFrame_OLD extends DeprecatedRenderable {
 	private static PixelFont pf;
 	
 	private float relSizeX, relSizeY;
@@ -19,7 +19,7 @@ public class TextDisplayFrame_OLD extends Renderable_OLD{
 	private Color color;
 	private BufferedImage bi = null;
 	
-	public TextDisplayFrame_OLD(Renderable_OLD container, String t, float relX, int minX, int maxX, float relY, int minY, int maxY, float relWidth, int minWidth, int maxWidth, float relHeight, int minHeight, int maxHeight, float relMarginX, int minMarginX, int maxMarginX, float relMarginY, int minMarginY, int maxMarginY, Color color, float relSizeX, float relSizeY, boolean symmetricalDimensions, boolean symmetricalMargins) {
+	public TextDisplayFrame_OLD(DeprecatedRenderable container, String t, float relX, int minX, int maxX, float relY, int minY, int maxY, float relWidth, int minWidth, int maxWidth, float relHeight, int minHeight, int maxHeight, float relMarginX, int minMarginX, int maxMarginX, float relMarginY, int minMarginY, int maxMarginY, Color color, float relSizeX, float relSizeY, boolean symmetricalDimensions, boolean symmetricalMargins) {
 		super(container,relX,minX,maxX, relY, minY, maxY, relWidth, minWidth, maxWidth, relHeight, minHeight, maxHeight, relMarginX, minMarginX, maxMarginX, relMarginY, minMarginY, maxMarginY, color, symmetricalDimensions, symmetricalMargins);
 		
 		this.color = color;

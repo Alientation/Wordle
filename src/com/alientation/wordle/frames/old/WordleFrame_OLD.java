@@ -3,9 +3,9 @@ package com.alientation.wordle.frames.old;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import com.alientation.gui.graphics.renderable.Renderable_OLD;
+import com.alientation.gui.graphics.renderable.DeprecatedRenderable;
 
-public class WordleFrame_OLD extends Renderable_OLD{
+public class WordleFrame_OLD extends DeprecatedRenderable {
 	
 	private GuessesFrame_OLD currentRound;
 	

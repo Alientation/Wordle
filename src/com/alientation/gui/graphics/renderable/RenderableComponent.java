@@ -263,34 +263,35 @@ public class RenderableComponent extends Renderable {
 	 * 
 	 * @param e
 	 */
+	@Deprecated
 	public void keyPressed(KeyEvent e) {
 		
 	}
-	
+	@Deprecated
 	public void mouseDragged(MouseEvent e) {
 		
 	}
-	
+	@Deprecated
 	public void mouseMoved(MouseEvent e) {
 		
 	}
-	
+	@Deprecated
 	public void mouseClicked(MouseEvent e) {
 		
 	}
-	
+	@Deprecated
 	public void mouseEntered(MouseEvent e) {
 		
 	}
-	
+	@Deprecated
 	public void mouseExited(MouseEvent e) {
 		
 	}
-	
+	@Deprecated
 	public void mousePressed(MouseEvent e) {
 		
 	}
-	
+	@Deprecated
 	public void mouseReleased(MouseEvent e) {
 		
 	}

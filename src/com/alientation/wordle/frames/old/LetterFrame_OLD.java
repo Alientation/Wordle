@@ -4,13 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import com.alientation.wordle.LetterStatus;
-import com.alientation.gui.graphics.renderable.Renderable_OLD;
+import com.alientation.gui.graphics.renderable.DeprecatedRenderable;
 
 /**
  * Holder class for a letter in a guess row. Used to make rendering easier.
  *
  */
-public class LetterFrame_OLD extends Renderable_OLD{
+public class LetterFrame_OLD extends DeprecatedRenderable {
 	private LetterRowFrame_OLD letterRow;
 	private char character;
 	private LetterStatus status;

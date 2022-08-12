@@ -5,9 +5,9 @@ import java.awt.Graphics;
 import java.util.HashMap;
 
 import com.alientation.wordle.frames.KeyFrame;
-import com.alientation.gui.graphics.renderable.Renderable_OLD;
+import com.alientation.gui.graphics.renderable.DeprecatedRenderable;
 
-public class KeyboardFrame_OLD extends Renderable_OLD{
+public class KeyboardFrame_OLD extends DeprecatedRenderable {
 	
 	private HashMap<Character,KeyFrame> keymap;
 	

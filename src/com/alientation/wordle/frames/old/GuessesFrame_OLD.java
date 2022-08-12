@@ -3,14 +3,14 @@ package com.alientation.wordle.frames.old;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import com.alientation.gui.graphics.renderable.Renderable_OLD;
+import com.alientation.gui.graphics.renderable.DeprecatedRenderable;
 import com.alientation.wordle.words.Word;
 import com.alientation.wordle.words.WordList;
 
 /**
  * Container for all the available guesses and the main processor for the game
  */
-public class GuessesFrame_OLD extends Renderable_OLD {
+public class GuessesFrame_OLD extends DeprecatedRenderable {
 	public static int roundCount = 0;
 	private static WordList validWords;
 	private static WordList wordleWords;

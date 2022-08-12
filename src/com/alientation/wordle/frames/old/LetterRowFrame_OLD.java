@@ -4,13 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import com.alientation.wordle.LetterStatus;
-import com.alientation.gui.graphics.renderable.Renderable_OLD;
+import com.alientation.gui.graphics.renderable.DeprecatedRenderable;
 
 /**
  * Holder for all guess letters
  * 
  */
-public class LetterRowFrame_OLD extends Renderable_OLD{
+public class LetterRowFrame_OLD extends DeprecatedRenderable {
 	private static int count = 0;
 	private GuessesFrame_OLD round;
 	private int id;

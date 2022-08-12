@@ -4,9 +4,9 @@ import java.awt.Color;
 
 import com.alientation.wordle.Game;
 import com.alientation.gui.util.Util;
-
-public class Renderable_OLD {
-	protected Renderable_OLD container;
+@Deprecated
+public class DeprecatedRenderable {
+	protected DeprecatedRenderable container;
 	protected Game game;
 	protected float relX, relY, relWidth, relHeight, relMarginX, relMarginY;
 	protected int x, y, width, height, marginX, marginY;
@@ -14,8 +14,8 @@ public class Renderable_OLD {
 	protected int maxX, maxY, maxWidth, maxHeight, maxMarginX, maxMarginY;
 	protected boolean symmetricalDimensions, symmetricalMargins;
 	protected Color color;
-	
-	public Renderable_OLD(Renderable_OLD container, float relX, int minX, int maxX, float relY, int minY, int maxY, float relWidth, int minWidth, int maxWidth, float relHeight, int minHeight, int maxHeight, float relMarginX, int minMarginX, int maxMarginX, float relMarginY, int minMarginY, int maxMarginY, Color color, boolean symmetricalDimensions, boolean symmetricalMargins) {
+	@Deprecated
+	public DeprecatedRenderable(DeprecatedRenderable container, float relX, int minX, int maxX, float relY, int minY, int maxY, float relWidth, int minWidth, int maxWidth, float relHeight, int minHeight, int maxHeight, float relMarginX, int minMarginX, int maxMarginX, float relMarginY, int minMarginY, int maxMarginY, Color color, boolean symmetricalDimensions, boolean symmetricalMargins) {
 		this.symmetricalDimensions = symmetricalDimensions;
 		this.symmetricalMargins = symmetricalMargins;
 		this.container = container;
@@ -45,8 +45,8 @@ public class Renderable_OLD {
 		
 		this.color = color;
 	}
-	
-	public Renderable_OLD(Renderable_OLD container, float relX, int minX, int maxX, float relY, int minY, int maxY, float relWidth, int minWidth, int maxWidth, float relHeight, int minHeight, int maxHeight, float relMarginX, int minMarginX, int maxMarginX, float relMarginY, int minMarginY, int maxMarginY, Color color, boolean symmetricalDimensions) {
+	@Deprecated
+	public DeprecatedRenderable(DeprecatedRenderable container, float relX, int minX, int maxX, float relY, int minY, int maxY, float relWidth, int minWidth, int maxWidth, float relHeight, int minHeight, int maxHeight, float relMarginX, int minMarginX, int maxMarginX, float relMarginY, int minMarginY, int maxMarginY, Color color, boolean symmetricalDimensions) {
 		this(container,relX,minX,maxX,relY,minY,maxY,relWidth,minWidth,maxWidth,relHeight,minHeight,maxHeight,relMarginX,minMarginX,maxMarginX,relMarginY,minMarginY,maxMarginY,color,symmetricalDimensions,false);
 	}
 	/*
@@ -82,7 +82,7 @@ public class Renderable_OLD {
 		this(null,relX,0,Integer.MAX_VALUE,relY,0,Integer.MAX_VALUE,relWidth,0,Integer.MAX_VALUE,relHeight,0,Integer.MAX_VALUE,relMarginX,0,Integer.MAX_VALUE,relMarginY,0,Integer.MAX_VALUE,color,false,false);
 	}
 	*/
-	
+	@Deprecated
 	public void resized() {
 		int containerWidth, containerHeight, containerX, containerY;
 		if (container == null) {

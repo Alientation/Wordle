@@ -5,15 +5,15 @@ import java.awt.event.KeyEvent;
 
 import com.alientation.gui.graphics.renderable.RenderableComponent;
 
-
-public class KeyInput extends KeyAdapter {
+@Deprecated
+public class Deprecated_KeyInput extends KeyAdapter {
 	
 	private RenderableComponent container;
-	
-	public KeyInput(RenderableComponent container) {
+	@Deprecated
+	public Deprecated_KeyInput(RenderableComponent container) {
 		this.container = container;
 	}
-	
+	@Deprecated
 	public void keyPressed(KeyEvent e) {
 		container.keyPressed(e);
 	}

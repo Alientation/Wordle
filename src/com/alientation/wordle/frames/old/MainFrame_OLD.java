@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import com.alientation.wordle.Game;
-import com.alientation.gui.graphics.renderable.Renderable_OLD;
+import com.alientation.gui.graphics.renderable.DeprecatedRenderable;
 
 /**
  * Container Window that has the wordle window and other necessary windows like data visualization
  * 
  * TODO: Store location, width, height, color information in each frame and component to make rendering easier
  */
-public class MainFrame_OLD extends Renderable_OLD{
+public class MainFrame_OLD extends DeprecatedRenderable {
 	
 	private WordleFrame_OLD wordleFrame;
 	private DataFrame_OLD dataFrame;
