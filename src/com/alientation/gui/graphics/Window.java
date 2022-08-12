@@ -12,6 +12,8 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import com.alientation.gui.graphics.events.Event;
+import com.alientation.gui.graphics.events.EventDispatcher;
 import com.alientation.gui.graphics.events.types.*;
 import com.alientation.gui.graphics.renderable.Renderable;
 
@@ -32,6 +34,7 @@ public class Window extends Canvas implements Runnable {
 	protected int prevWidth, prevHeight, fps, tps;
 	protected Thread windowThread;
 	protected boolean running;
+	protected EventDispatcher eventDispatcher;
 	
 	
 	public Window(int width, int height, String title) {
@@ -60,6 +63,7 @@ public class Window extends Canvas implements Runnable {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				MousePressedEvent event = new MousePressedEvent(renderable.getWindow(), e);
+
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
@@ -105,7 +109,9 @@ public class Window extends Canvas implements Runnable {
 				KeyReleasedEvent event = new KeyReleasedEvent(renderable.getWindow(), e);
 			}
 		});
-		
+
+		eventDispatcher = new EventDispatcher(this);
+
 		renderable = new Renderable.Builder().window(this).build();
 	}
 	

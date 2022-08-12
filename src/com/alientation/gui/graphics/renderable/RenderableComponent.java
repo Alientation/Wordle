@@ -259,39 +259,47 @@ public class RenderableComponent extends Renderable {
 	 */
 	
 	/**
-	 * TODO: Instead have handlers that implement these stuff
+	 *
 	 * 
 	 * @param e
 	 */
-	@Deprecated
+
 	public void keyPressed(KeyEvent e) {
 		
 	}
-	@Deprecated
+
+	public void keyReleased(KeyEvent e) {
+
+	}
+
+	public void keyTyped(KeyEvent e) {
+
+	}
+
 	public void mouseDragged(MouseEvent e) {
 		
 	}
-	@Deprecated
+
 	public void mouseMoved(MouseEvent e) {
 		
 	}
-	@Deprecated
+
 	public void mouseClicked(MouseEvent e) {
 		
 	}
-	@Deprecated
+
 	public void mouseEntered(MouseEvent e) {
 		
 	}
-	@Deprecated
+
 	public void mouseExited(MouseEvent e) {
 		
 	}
-	@Deprecated
+
 	public void mousePressed(MouseEvent e) {
 		
 	}
-	@Deprecated
+
 	public void mouseReleased(MouseEvent e) {
 		
 	}
