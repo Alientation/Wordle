@@ -5,11 +5,14 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
+import java.awt.event.*;
+import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
+import com.alientation.gui.graphics.events.types.*;
 import com.alientation.gui.graphics.renderable.Renderable;
 
 public class Window extends Canvas implements Runnable {
@@ -52,6 +55,56 @@ public class Window extends Canvas implements Runnable {
 		frame.add(this);
 		frame.setVisible(visible);
 		Toolkit.getDefaultToolkit().setDynamicLayout(false);
+
+		frame.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				MousePressedEvent event = new MousePressedEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				MouseReleasedEvent event = new MouseReleasedEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void mouseMoved(MouseEvent e) {
+				MouseMovedEvent event = new MouseMovedEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent e) {
+				MouseScrolledEvent event = new MouseScrolledEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				MouseClickedEvent event = new MouseClickedEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void mouseDragged(MouseEvent e) {
+				MouseDraggedEvent event = new MouseDraggedEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				MouseEnteredEvent event = new MouseEnteredEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void mouseExited(MouseEvent e) {
+				MouseExitedEvent event = new MouseExitedEvent(renderable.getWindow(), e);
+			}
+		});
+
+		frame.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				KeyTypedEvent event = new KeyTypedEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				KeyPressedEvent event = new KeyPressedEvent(renderable.getWindow(), e);
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				KeyReleasedEvent event = new KeyReleasedEvent(renderable.getWindow(), e);
+			}
+		});
 		
 		renderable = new Renderable.Builder().window(this).build();
 	}
