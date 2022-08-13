@@ -1,8 +1,15 @@
-(-) Rework DimensionComponents to simplify repetitive classes
+(x) Rework DimensionComponents to simplify repetitive classes
     -   potentially by making one DimensionComponents class with static objects of DimensionComponents
         that will return the dimension of a passed object. Will have to refactor Dimension classes too
         to store subreferences
-(-) Events, Registering Event Handlers, and Passing Events To Handlers
-(-) Add Key/Mouse input events
+(/) Events, Registering Event Handlers, and Passing Events To Handlers
+(/) Add Key/Mouse input events
+(-) Background
+    -   Background Image
+(-) RenderableImage
+(-) Frame
+    -   Rounded edges
+    -   thickness, color, transparency
+    -   make sure whenever the frame itself is updated, tell the container renderableComponent to update to
 (-) Button
 (-) Fonts
