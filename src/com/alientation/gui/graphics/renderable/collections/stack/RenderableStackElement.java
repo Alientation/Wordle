@@ -113,11 +113,6 @@ public class RenderableStackElement extends RenderableComponent {
 	public RenderableStackElement(Builder builder) {
 		super(builder);
 		this.child = builder.child;
-	}
-	
-	public RenderableStackElement(Renderable container, DimensionContainer dimensions, Color color, RenderableComponent child) {
-		super(container,dimensions,color);
-		this.child = child;
 		joinChild();
 	}
 	

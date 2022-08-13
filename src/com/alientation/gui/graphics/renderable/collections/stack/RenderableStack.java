@@ -156,15 +156,6 @@ public class RenderableStack extends RenderableCollection {
 		this.registerDimensions();
 	}
 	
-	public RenderableStack(Renderable container, DimensionContainer dimensions, Color color, Sizing sizing) {
-		super(container,dimensions,color);
-		this.spacing = dimensions.getDimension(DimensionID.SPACING);
-		update();
-		this.sizing = sizing;
-		stackSlots = new ArrayList<>();
-		this.registerDimensions();
-	}
-	
 	public void registerDimensions() {
 		registerDimensions(this.spacing);
 	}
@@ -187,16 +178,17 @@ public class RenderableStack extends RenderableCollection {
 	}
 	
 	public RenderableStack addRenderable(RenderableComponent element) {
-		RenderableStackElement stackElement = new RenderableStackElement(this,
-				new DimensionContainer(
-						new StaticDimension(0),
-						new StaticDimension(0),
-						new RelativeDimension(new DimensionSafeWidth(this),1f),
-						new RelativeDimension(new DimensionSafeHeight(this),1f),
-						new StaticDimension(0),
-						new StaticDimension(0)
-			),
-			Color.WHITE,element);
+		RenderableStackElement stackElement = new RenderableStackElement.Builder()
+				.container(this)
+				.x(new StaticDimension(0))
+				.y(new StaticDimension(0))
+				.width(new RelativeDimension(new DimensionSafeWidth(this),1f))
+				.height(new RelativeDimension(new DimensionSafeHeight(this),1f))
+				.marginX(new StaticDimension(0))
+				.marginY(new StaticDimension(0))
+				.color(Color.WHITE)
+				.child(element)
+				.build();
 		
 		this.stackSlots.add(stackElement);
 		resizeElements();

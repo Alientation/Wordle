@@ -2,8 +2,11 @@ package com.alientation.gui.graphics.renderable;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
 
 import com.alientation.gui.graphics.Window;
 
@@ -11,36 +14,20 @@ import com.alientation.gui.graphics.Window;
  * Base for all renderable objects. All renderables must inherit from this.
  *
  *
- * Background
- * - color, transparency
- * - image
- * - Layer (how the background edges look like)
- * - - radius (edges radius)
- * - - color, transparency
- * - - thickness
- *
- *
- *
  */
 public class Renderable {
-	
-	/*
-	 * Window that this renderable is contained within
-	 */
+	//Window that this renderable is contained within
 	protected Window window;
-	
-	/*
-	 * The BufferedImage that details this renderable only, dimensions equal to the dimension of this renderable. Used for z ordering and rendering optimization. Still in development
-	 */
+
+	//The BufferedImage that details this renderable only, dimensions equal to the dimension of this renderable.
+	// Used for z ordering and rendering optimization. Still in development
 	protected BufferedImage render;
 	protected boolean reqUpdate;
 	protected ArrayList<RenderableComponent> subreferences;
-	
 	protected String id;
 	
-	
 	public static class Builder {
-		private Window window;
+		protected Window window;
 		private BufferedImage render;
 		private ArrayList<RenderableComponent> subreferences;
 		private String id;
@@ -59,7 +46,7 @@ public class Renderable {
 			return this;
 		}
 		
-		public Builder subreferences(ArrayList<RenderableComponent> renderable) {
+		public Builder subreferences(Collection<RenderableComponent> renderable) {
 			subreferences.addAll(renderable);
 			return this;
 		}
@@ -119,7 +106,14 @@ public class Renderable {
 	public ArrayList<RenderableComponent> getSubreferences() {
 		return this.subreferences;
 	}
-	
+
+
+	public void reorderZIndexing() {
+
+
+	}
+
+
 	/**
 	 * TODO: implement
 	 * 
@@ -137,7 +131,7 @@ public class Renderable {
 	}
 	
 	/**
-	 * TODO: fix this render optimization.. instead of having Renderable and RenderableComponent, combine these two, add update events to dimensions
+	 *
 	 */
 	public void updateRender() {
 		if (!reqUpdate)
@@ -153,6 +147,46 @@ public class Renderable {
 		this.reqUpdate = true;
 		for (RenderableComponent r : subreferences)
 			r.resized();
+	}
+
+	public void keyPressed(KeyEvent e) {
+
+	}
+
+	public void keyReleased(KeyEvent e) {
+
+	}
+
+	public void keyTyped(KeyEvent e) {
+
+	}
+
+	public void mouseDragged(MouseEvent e) {
+
+	}
+
+	public void mouseMoved(MouseEvent e) {
+
+	}
+
+	public void mouseClicked(MouseEvent e) {
+
+	}
+
+	public void mouseEntered(MouseEvent e) {
+
+	}
+
+	public void mouseExited(MouseEvent e) {
+
+	}
+
+	public void mousePressed(MouseEvent e) {
+
+	}
+
+	public void mouseReleased(MouseEvent e) {
+
 	}
 	
 	/**

@@ -30,13 +30,4 @@ public class RenderableDropDownMenu extends RenderableStack {
 	public RenderableDropDownMenu(Builder builder) {
 		super(builder.builder);
 	}
-	
-	public RenderableDropDownMenu(Renderable container, DimensionContainer dimensions, Color color, Sizing sizing) {
-		super(container, dimensions, color, sizing);
-	}
-	/*
-	public RenderableDropDownMenu(Renderable container, Dimension spacing, Color color, Sizing sizing) {
-		super(container, spacing, color, sizing);
-	}*/
-
 }

@@ -3,10 +3,7 @@ package com.alientation.gui.graphics.renderable;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,7 +13,13 @@ import com.alientation.gui.graphics.renderable.dimension.*;
 import com.alientation.gui.graphics.renderable.dimension.component.*;
 
 /**
- * 
+ * Background
+ *  * - image
+ *  * - color, transparency
+ *  * Frame
+ *  * - radius (edges radius)
+ *  * - thickness
+ *  * - color, transparency (edge)
  *
  */
 public class RenderableComponent extends Renderable {
@@ -28,23 +31,31 @@ public class RenderableComponent extends Renderable {
 	protected Renderable container;
 	
 	//Dimension objects, used so there can be relative dimensions to another component's dimension
-	protected Dimension x,y,width,height,marginX,marginY;  //relative position to the container
-	
-	//The Color of this renderable's background
-	protected Color color;
+	protected Dimension marginX,marginY;  //relative position to the container
+
 	
 	//Whether the component should be rendered
 	protected boolean visible;
 
 	//dimensionComponents who accesses this renderable
 	protected Set<DimensionComponent> dimensionReferences;
-	
+
+	protected int zIndex;
+	protected RenderableBackground background;
+	protected RenderableFrame frame;
+
+	/**
+	 * TODO: fix builder class in other renderable classes
+	 */
 	public static class Builder extends Renderable.Builder{
 		private Renderable container;
-		private Dimension x,y,width,height,marginX,marginY;
-		private Color color;
+		private Dimension x,y,width,height,marginX,marginY,radius,thickness;
+		private Color backgroundColor, frameColor;
 		private boolean visible;
+		private float backgroundTransparency, frameTransparency;
+		private RenderableImage backgroundImage;
 		private Set<DimensionComponent> dimensionReferences;
+		private int zIndex;
 		
 		public Builder() {
 			this.dimensionReferences = new HashSet<>();
@@ -60,7 +71,7 @@ public class RenderableComponent extends Renderable {
 			return this;
 		}
 		
-		public Builder subreferences(ArrayList<RenderableComponent> renderables) {
+		public Builder subreferences(Collection<RenderableComponent> renderables) {
 			super.subreferences(renderables);
 			return this;
 		}
@@ -87,6 +98,7 @@ public class RenderableComponent extends Renderable {
 		
 		public Builder container(Renderable container) {
 			this.container = container;
+			this.window = container.window;
 			return this;
 		}
 		
@@ -119,14 +131,49 @@ public class RenderableComponent extends Renderable {
 			this.marginY = marginY;
 			return this;
 		}
+
+		public Builder radius(Dimension radius) {
+			this.radius = radius;
+			return this;
+		}
+
+		public Builder thickness(Dimension thickness) {
+			this.thickness = thickness;
+			return this;
+		}
+
+		public Builder backgroundTransparency(float backgroundTransparency) {
+			this.backgroundTransparency = backgroundTransparency;
+			return this;
+		}
+
+		public Builder frameTransparency(float frameTransparency) {
+			this.frameTransparency = frameTransparency;
+			return this;
+		}
+
+		public Builder backgroundImage(RenderableImage backgroundImage) {
+			this.backgroundImage = backgroundImage;
+			return this;
+		}
 		
 		public Builder color(Color color) {
-			this.color = color;
+			this.backgroundColor = color;
+			return this;
+		}
+
+		public Builder frameColor(Color frameColor) {
+			this.frameColor = frameColor;
 			return this;
 		}
 		
 		public Builder visible(boolean visible) {
 			this.visible = visible;
+			return this;
+		}
+
+		public Builder zIndex(int zIndex) {
+			this.zIndex = zIndex;
 			return this;
 		}
 		
@@ -151,44 +198,30 @@ public class RenderableComponent extends Renderable {
 				marginX = StaticDimension.MIN;
 			if (marginY == null)
 				marginY = StaticDimension.MIN;
-			if (color == null)
-				color = Color.WHITE;
+			if (radius == null)
+				radius = StaticDimension.MIN;
+			if (thickness == null)
+				thickness = StaticDimension.MIN;
+			if (backgroundColor == null)
+				backgroundColor = Color.WHITE;
+			if (frameColor == null)
+				frameColor = Color.LIGHT_GRAY;
 		}
 	}
 	
 	public RenderableComponent(Builder builder) {
 		super(builder);
 		this.container = builder.container;
-		this.x = builder.x;
-		this.y = builder.y;
-		this.width = builder.width;
-		this.height = builder.height;
 		this.marginX = builder.marginX;
 		this.marginY = builder.marginY;
-		this.color = builder.color;
 		this.visible = builder.visible;
 		this.container.addSubreference(this);
 		this.dimensionReferences = builder.dimensionReferences;
-		
+
+		this.background = new RenderableBackground(this, builder.backgroundImage, builder.backgroundColor, builder.backgroundTransparency);
+		this.frame = new RenderableFrame(this, builder.x, builder.y, builder.width, builder.height, builder.radius, builder.thickness, builder.frameColor, builder.frameTransparency);
 		registerDimensions();
 	}
-	
-	
-	public RenderableComponent(Renderable container, DimensionContainer dimensions, Color color) {
-		super(new Renderable.Builder().window(container.getWindow()));
-		this.container = container;
-		this.x = dimensions.getDimension(DimensionID.X);
-		this.y = dimensions.getDimension(DimensionID.Y);
-		this.width = dimensions.getDimension(DimensionID.WIDTH);
-		this.height = dimensions.getDimension(DimensionID.HEIGHT);
-		this.marginX = dimensions.getDimension(DimensionID.MARGIN_X);
-		this.marginY = dimensions.getDimension(DimensionID.MARGIN_Y);
-		this.color = color;
-		this.container.addSubreference(this);
-		this.dimensionReferences = new HashSet<>();
-		registerDimensions();
-	}
-	
 	
 	private RenderableComponent() {
 		this(new RenderableComponent.Builder()
@@ -204,7 +237,7 @@ public class RenderableComponent extends Renderable {
 	}
 	
 	public void registerDimensions() {
-		registerDimensions(x,y,width,height,marginX,marginY);
+		registerDimensions(marginX,marginY, frame.getX(), frame.getY(), frame.getWidth(), frame.getHeight(), frame.getRadius(), frame.getThickness());
 	}
 	
 	protected void registerDimensions(Dimension... ds) {
@@ -226,7 +259,7 @@ public class RenderableComponent extends Renderable {
 		//if (this.visible)
 			//g.drawImage(render(),x(), y(), null);
 			
-		g.setColor(color);
+		g.setColor(background.getColor());
 		g.fillRect(x(), y(), width(), height());
 		super.render(g);
 	}
@@ -237,54 +270,13 @@ public class RenderableComponent extends Renderable {
 		reqUpdate = false;
 		render = new BufferedImage(width(),height(),BufferedImage.TYPE_INT_ARGB);
 		Graphics temp = render.createGraphics();
-		temp.setColor(this.color);
+		temp.setColor(background.getColor());
 		temp.fillRect(0, 0, width(), height());
 		
 		for (RenderableComponent r : subreferences)
 			temp.drawImage(r.render(), r.x(), r.y(), null);
 	}
 
-
-	public void keyPressed(KeyEvent e) {
-		
-	}
-
-	public void keyReleased(KeyEvent e) {
-
-	}
-
-	public void keyTyped(KeyEvent e) {
-
-	}
-
-	public void mouseDragged(MouseEvent e) {
-		
-	}
-
-	public void mouseMoved(MouseEvent e) {
-		
-	}
-
-	public void mouseClicked(MouseEvent e) {
-		
-	}
-
-	public void mouseEntered(MouseEvent e) {
-		
-	}
-
-	public void mouseExited(MouseEvent e) {
-		
-	}
-
-	public void mousePressed(MouseEvent e) {
-		
-	}
-
-	public void mouseReleased(MouseEvent e) {
-		
-	}
-	
 	public void addDimensionReference(DimensionComponent d) {
 		this.dimensionReferences.add(d);
 	}
@@ -334,199 +326,173 @@ public class RenderableComponent extends Renderable {
 	/*
 	 * Color
 	 */
-	public RenderableComponent setColor(Color color) {
-		this.color = color;
+	public RenderableComponent setBackgroundColor(Color color) {
+		this.background.setColor(color);
+		this.reqUpdate = true;
+		return this;
+	}
+
+	public RenderableComponent setFrameColor(Color color) {
+		this.frame.setColor(color);
+		this.reqUpdate = true;
+		return this;
+	}
+
+	public RenderableComponent setBackgroundTransparency(float transparency) {
+		background.setTransparency(transparency);
+		this.reqUpdate = true;
+		return this;
+	}
+
+	public RenderableComponent setFrameTransparency(float transparency) {
+		frame.setTransparency(transparency);
 		this.reqUpdate = true;
 		return this;
 	}
 	
-	public Color getColor() {
-		return this.color;
+	public Color getBackgroundColor() {
+		return background.getColor();
+	}
+
+	public Color getFrameColor() {
+		return frame.getColor();
+	}
+
+	public float getBackgroundTransparency() {
+		return background.getTransparency();
+	}
+
+	public float getFrameTransparency() {
+		return frame.getTransparency();
+	}
+
+	public RenderableBackground getBackground() {
+		return background;
+	}
+
+	public RenderableFrame getFrame() {
+		return frame;
 	}
 	
 	public void reqUpdate() {
 		this.reqUpdate = true;
 	}
-	
-	/*TODO: finish setting up subreference registration for dimensions stuff
-	 * X
-	 */
-	public RenderableComponent setX(StaticDimension x) {
-		this.x.unregister(this);
-		this.x = x;
-		this.x.register(this);
+
+	public RenderableComponent setX(Dimension x) {
+		if (frame.getX() instanceof RelativeDimension)
+			this.dimensionReferences.remove(((RelativeDimension) frame.getX()).getRelTo());
+		frame.setX(x);
 		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setX(RelativeDimension x) {
-		this.dimensionReferences.remove(((RelativeDimension) this.x).getRelTo());
-		this.x.unregister(this);
-		this.x = x;
-		this.x.register(this);
-		this.dimensionReferences.add(((RelativeDimension) this.x).getRelTo());
-		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setX(DimensionComponent relTo, float val) {
-		if (this.x instanceof RelativeDimension)
-			this.dimensionReferences.remove(((RelativeDimension) this.x).getRelTo());
-		this.x = new RelativeDimension(relTo,val);
-		this.reqUpdate = true;
-		this.dimensionReferences.add(((RelativeDimension) this.width).getRelTo());
-		return this;
-	}
-	
-	public RenderableComponent setX(int val) {
-		if (this.x instanceof RelativeDimension)
-			this.dimensionReferences.remove(((RelativeDimension) this.x).getRelTo());
-		this.x = new StaticDimension(val);
-		this.reqUpdate = true;
+		if (frame.getX() instanceof RelativeDimension)
+			this.dimensionReferences.add(((RelativeDimension) frame.getX()).getRelTo());
 		return this;
 	}
 	
 	public Dimension getX() {
-		return this.x;
+		return frame.getX();
 	}
 	
 	public int x() {
-		return this.x.val() + container.safeX();
+		return frame.getX().val() + container.safeX();
 	}
 	
 	public int relX() {
-		return this.x.val();
+		return frame.getX().val();
 	}
 	
 	public int safeX() {
-		return this.x.val() + container.safeX() + marginX.val();
+		return frame.getX().val() + container.safeX() + marginX.val();
 	}
 	
 	/*
 	 * Y
 	 */
 	public RenderableComponent setY(Dimension y) {
-		if (this.y instanceof RelativeDimension)
-			this.dimensionReferences.remove(((RelativeDimension) this.y).getRelTo());
-		this.y = y;
+		if (frame.getY() instanceof RelativeDimension)
+			this.dimensionReferences.remove(((RelativeDimension) frame.getY()).getRelTo());
+		frame.setY(y);
 		this.reqUpdate = true;
-		if (this.x instanceof RelativeDimension)
-			this.dimensionReferences.add(((RelativeDimension) this.x).getRelTo());
-		return this;
-	}
-	
-	public RenderableComponent setY(DimensionComponent relTo, float val) {
-		this.y = new RelativeDimension(relTo,val);
-		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setY(int val) {
-		this.y = new StaticDimension(val);
-		this.reqUpdate = true;
+		if (frame.getY() instanceof RelativeDimension)
+			this.dimensionReferences.add(((RelativeDimension) frame.getY()).getRelTo());
 		return this;
 	}
 	
 	public Dimension getY() {
-		return this.y;
+		return frame.getY();
 	}
 	
 	public int y() {
-		return this.y.val() + container.safeY();
+		return frame.getY().val() + container.safeY();
 	}
 	
 	public int relY() {
-		return this.y.val();
+		return frame.getY().val();
 	}
 	
 	public int safeY() {
-		return this.y.val() + container.safeY() + marginY.val();
+		return frame.getY().val() + container.safeY() + marginY.val();
 	}
 	
 	/*
 	 * Width
 	 */
 	public RenderableComponent setWidth(Dimension width) {
-		this.width = width;
+		if (frame.getWidth() instanceof RelativeDimension)
+			this.dimensionReferences.remove(((RelativeDimension) frame.getWidth()).getRelTo());
+		frame.setWidth(width);
 		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setWidth(DimensionComponent relTo, float val) {
-		this.width = new RelativeDimension(relTo,val);
-		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setWidth(int val) {
-		this.width = new StaticDimension(val);
-		this.reqUpdate = true;
+		if (frame.getWidth() instanceof RelativeDimension)
+			this.dimensionReferences.add(((RelativeDimension) frame.getWidth()).getRelTo());
 		return this;
 	}
 	
 	public Dimension getWidth() {
-		return this.width;
+		return frame.getWidth();
 	}
 	
 	public int width() {
-		return this.width.val();
+		return frame.getWidth().val();
 	}
 	
 	public int safeWidth() {
-		return this.width.val() - marginX.val() * 2;
+		return frame.getWidth().val() - marginX.val() * 2;
 	}
 	
 	/*
 	 * Height
 	 */
 	public RenderableComponent setHeight(Dimension height) {
-		this.height = height;
+		if (frame.getHeight() instanceof RelativeDimension)
+			this.dimensionReferences.remove(((RelativeDimension) frame.getHeight()).getRelTo());
+		frame.setHeight(height);
 		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setHeight(DimensionComponent relTo, float val) {
-		this.height = new RelativeDimension(relTo,val);
-		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setHeight(int val) {
-		this.height = new StaticDimension(val);
-		this.reqUpdate = true;
+		if (frame.getHeight() instanceof RelativeDimension)
+			this.dimensionReferences.add(((RelativeDimension) frame.getHeight()).getRelTo());
 		return this;
 	}
 	
 	public Dimension getHeight() {
-		return this.height;
+		return frame.getHeight();
 	}
 	
 	public int height() {
-		return this.height.val();
+		return frame.getHeight().val();
 	}
 	
 	public int safeHeight() {
-		return this.height.val() - marginY.val() * 2;
+		return frame.getHeight().val() - marginY.val() * 2;
 	}
 	
 	/*
 	 * Margin
 	 */
 	public RenderableComponent setMarginX(Dimension marginX) {
+		if (this.marginX instanceof RelativeDimension)
+			this.dimensionReferences.remove(((RelativeDimension) this.marginX).getRelTo());
 		this.marginX = marginX;
 		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setMarginX(DimensionComponent relTo, float val) {
-		this.marginX = new RelativeDimension(relTo,val);
-		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setMarginX(int val) {
-		this.marginX = new StaticDimension(val);
-		this.reqUpdate = true;
+		if (this.marginX instanceof RelativeDimension)
+			this.dimensionReferences.add(((RelativeDimension) this.marginX).getRelTo());
 		return this;
 	}
 	
@@ -539,20 +505,12 @@ public class RenderableComponent extends Renderable {
 	}
 	
 	public RenderableComponent setMarginY(Dimension marginY) {
+		if (this.marginY instanceof RelativeDimension)
+			this.dimensionReferences.remove(((RelativeDimension) this.marginY).getRelTo());
 		this.marginY = marginY;
 		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setMarginY(DimensionComponent relTo, float val) {
-		this.marginY = new RelativeDimension(relTo,val);
-		this.reqUpdate = true;
-		return this;
-	}
-	
-	public RenderableComponent setMarginY(int val) {
-		this.marginY = new StaticDimension(val);
-		this.reqUpdate = true;
+		if (this.marginY instanceof RelativeDimension)
+			this.dimensionReferences.add(((RelativeDimension) this.marginY).getRelTo());
 		return this;
 	}
 	
@@ -562,5 +520,41 @@ public class RenderableComponent extends Renderable {
 	
 	public int marginY() {
 		return this.marginY.val();
+	}
+
+	public RenderableComponent setRadius(Dimension radius) {
+		if (frame.getRadius() instanceof RelativeDimension)
+			this.dimensionReferences.remove(((RelativeDimension) frame.getRadius()).getRelTo());
+		frame.setRadius(radius);
+		this.reqUpdate = true;
+		if (frame.getRadius() instanceof RelativeDimension)
+			this.dimensionReferences.add(((RelativeDimension) frame.getRadius()).getRelTo());
+		return this;
+	}
+
+	public Dimension getRadius() {
+		return frame.getRadius();
+	}
+
+	public int radius() {
+		return frame.getRadius().val();
+	}
+
+	public RenderableComponent setThickness(Dimension thickness) {
+		if (frame.getThickness() instanceof RelativeDimension)
+			this.dimensionReferences.remove(((RelativeDimension) frame.getThickness()).getRelTo());
+		frame.setThickness(thickness);
+		this.reqUpdate = true;
+		if (frame.getThickness() instanceof RelativeDimension)
+			this.dimensionReferences.add(((RelativeDimension) frame.getThickness()).getRelTo());
+		return this;
+	}
+
+	public Dimension getThickness() {
+		return frame.getThickness();
+	}
+
+	public int thickness() {
+		return frame.getThickness().val();
 	}
 }

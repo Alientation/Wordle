@@ -9,7 +9,6 @@ import com.alientation.gui.graphics.renderable.RenderableComponent;
 import com.alientation.gui.graphics.Window;
 import com.alientation.gui.graphics.renderable.Renderable;
 import com.alientation.gui.graphics.renderable.dimension.Dimension;
-import com.alientation.gui.graphics.renderable.dimension.DimensionContainer;
 
 public class RenderableCollection extends RenderableComponent {
 	
@@ -117,28 +116,7 @@ public class RenderableCollection extends RenderableComponent {
 		super(builder);
 		this.renderableElements = builder.renderableElements;
 	}
-	
-	public RenderableCollection(Renderable container, DimensionContainer dimensions, Color color) {
-		super(container,dimensions,color);
-		renderableElements = new ArrayList<>();
-	}
-	/*
-	public RenderableCollection(Renderable container, DimensionContainer dimensions) {
-		super(container,dimensions);
-		renderableElements = new ArrayList<>();
-	}
-	
-	public RenderableCollection(Renderable container, Color color) {
-		super(container,color);
-		renderableElements = new ArrayList<>();
-	}
-	
-	public RenderableCollection(Renderable container) {
-		super(container);
-		renderableElements = new ArrayList<>();
-	}
-	*/
-	
+
 	public RenderableCollection addRenderable(RenderableComponent renderable) {
 		this.renderableElements.add(renderable);
 		return this;
