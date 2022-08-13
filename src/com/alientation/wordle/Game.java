@@ -1,11 +1,8 @@
 package com.alientation.wordle;
 
 import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.events.EventListener;
-import com.alientation.gui.graphics.events.types.MouseClickedEvent;
 import com.alientation.gui.graphics.font.PixelFont;
 import com.alientation.wordle.frames.MainFrame;
-import com.alientation.wordle.frames.old.TextDisplayFrame_OLD;
 import com.alientation.wordle.words.WordList;
 
 
@@ -24,7 +21,6 @@ public class Game extends Window {
 		super(INIT_WIDTH,INIT_HEIGHT,INIT_TITLE);
 		Game.game = this;
 		pf = new PixelFont();
-		TextDisplayFrame_OLD.setPixelFont(pf);
 		
 		newMainFrame = new MainFrame(this.renderable);
 		

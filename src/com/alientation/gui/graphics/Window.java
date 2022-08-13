@@ -12,16 +12,14 @@ import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import com.alientation.gui.graphics.events.Event;
 import com.alientation.gui.graphics.events.EventDispatcher;
 import com.alientation.gui.graphics.events.types.*;
 import com.alientation.gui.graphics.renderable.Renderable;
 
 public class Window extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
-	public static final int INIT_WIDTH = 800, INIT_HEIGHT = 1000, NUM_TICKS = 60;
+	public static final int INIT_WIDTH = 800, INIT_HEIGHT = 1000, INIT_TPS = 60;
 	public static final String INIT_TITLE = "WORDLE";
-	
 	public static Window INIT_WINDOW;
 	
 	protected BufferedImage image;
@@ -30,8 +28,9 @@ public class Window extends Canvas implements Runnable {
 	
 	protected Renderable renderable;
 	protected JFrame frame;
-	
-	protected int prevWidth, prevHeight, fps, tps;
+
+	protected int prevWidth, prevHeight;
+	protected int targetTPS, tps;
 	protected Thread windowThread;
 	protected boolean running;
 	protected EventDispatcher eventDispatcher;
@@ -184,11 +183,10 @@ public class Window extends Canvas implements Runnable {
 	public void run() {
 		this.requestFocus();
 		long lastTime = System.nanoTime();
-		double amountOfTicks = NUM_TICKS;
+		double amountOfTicks = INIT_TPS;
 		double ns = 1000000000 / amountOfTicks;
 		double delta = 0;
 		long timer = System.currentTimeMillis();
-		int frames = 0;
 		int numTicks = 0;
 		long now;
 		while(this.running) {
@@ -199,15 +197,11 @@ public class Window extends Canvas implements Runnable {
 				tick();
 				numTicks++;
 				delta--;
-				frames++;
 				render();
 			}
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
-				
-				this.fps = frames;
 				this.tps = numTicks;
-				frames = 0;
 				numTicks = 0;
 			}
 		}
@@ -223,10 +217,6 @@ public class Window extends Canvas implements Runnable {
 	
 	public void setRenderable(Renderable renderable) {
 		this.renderable = renderable;
-	}
-	
-	public int getFPS() {
-		return fps;
 	}
 	
 	public int getTPS() {

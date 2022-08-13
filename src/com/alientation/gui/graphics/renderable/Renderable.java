@@ -10,6 +10,17 @@ import com.alientation.gui.graphics.Window;
 /**
  * Base for all renderable objects. All renderables must inherit from this.
  *
+ *
+ * Background
+ * - color, transparency
+ * - image
+ * - Layer (how the background edges look like)
+ * - - radius (edges radius)
+ * - - color, transparency
+ * - - thickness
+ *
+ *
+ *
  */
 public class Renderable {
 	

@@ -168,7 +168,7 @@ public class RenderableComponent extends Renderable {
 		this.color = builder.color;
 		this.visible = builder.visible;
 		this.container.addSubreference(this);
-		this.dimensionReferences = new HashSet<>();
+		this.dimensionReferences = builder.dimensionReferences;
 		
 		registerDimensions();
 	}
@@ -221,12 +221,7 @@ public class RenderableComponent extends Renderable {
 		for (DimensionComponent d : this.dimensionReferences)
 			d.valueChanged();
 	}
-	
-	/**
-	 * 
-	 * 
-	 * @param g
-	 */
+
 	public void render(Graphics g) {
 		//if (this.visible)
 			//g.drawImage(render(),x(), y(), null);
@@ -248,16 +243,7 @@ public class RenderableComponent extends Renderable {
 		for (RenderableComponent r : subreferences)
 			temp.drawImage(r.render(), r.x(), r.y(), null);
 	}
-	
-	/*
-	 * User Input Events
-	 */
-	
-	/**
-	 *
-	 * 
-	 * @param e
-	 */
+
 
 	public void keyPressed(KeyEvent e) {
 		

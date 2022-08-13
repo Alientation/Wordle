@@ -3,18 +3,17 @@ package com.alientation.wordle.frames;
 import java.awt.Graphics;
 
 import com.alientation.wordle.LetterStatus;
-import com.alientation.wordle.frames.old.KeyRowFrame_OLD;
 
 public class KeyFrame {
-	private KeyRowFrame_OLD container;
+	private KeyRowFrame container;
 	private char character;
 	private LetterStatus status;
 	
-	public KeyFrame(KeyRowFrame_OLD container) {
+	public KeyFrame(KeyRowFrame container) {
 		this(container,' ');
 	}
 	
-	public KeyFrame(KeyRowFrame_OLD container, char character) {
+	public KeyFrame(KeyRowFrame container, char character) {
 		this.status = LetterStatus.EMPTY;
 		this.container = container;
 		this.character = character;
