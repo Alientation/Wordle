@@ -7,6 +7,9 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.alientation.gui.graphics.Window;
 import com.alientation.gui.graphics.renderable.dimension.*;
@@ -17,42 +20,34 @@ import com.alientation.gui.graphics.renderable.dimension.component.*;
  *
  */
 public class RenderableComponent extends Renderable {
-	/*
-	 * The default renderable of the first Window created
-	 */
+
+	//The default renderable of the first Window created
 	public static RenderableComponent BASE = new RenderableComponent();
-	
-	/*
-	 * The container this renderable is contained in. Default is the renderable base
-	 */
+
+	//The container this renderable is contained in. Default is the renderable base
 	protected Renderable container;
 	
-	/*
-	 * Dimension objects, used so there can be relative dimensions to another component's dimension
-	 */
+	//Dimension objects, used so there can be relative dimensions to another component's dimension
 	protected Dimension x,y,width,height,marginX,marginY;  //relative position to the container
 	
-	/*
-	 * The Color of this renderable's background
-	 */
+	//The Color of this renderable's background
 	protected Color color;
 	
-	/*
-	 * Whether the component should be rendered
-	 */
+	//Whether the component should be rendered
 	protected boolean visible;
-	
-	protected ArrayList<DimensionComponent> dimensionReferences;
+
+	//dimensionComponents who accesses this renderable
+	protected Set<DimensionComponent> dimensionReferences;
 	
 	public static class Builder extends Renderable.Builder{
 		private Renderable container;
 		private Dimension x,y,width,height,marginX,marginY;
 		private Color color;
 		private boolean visible;
-		private ArrayList<DimensionComponent> dimensionReferences;
+		private Set<DimensionComponent> dimensionReferences;
 		
 		public Builder() {
-			this.dimensionReferences = new ArrayList<>();
+			this.dimensionReferences = new HashSet<>();
 		}
 		
 		public Builder window(Window window) {
@@ -75,7 +70,7 @@ public class RenderableComponent extends Renderable {
 			return this;
 		}
 		
-		public Builder dimensionReferences(ArrayList<DimensionComponent> dimensions) {
+		public Builder dimensionReferences(Collection<DimensionComponent> dimensions) {
 			this.dimensionReferences.addAll(dimensions);
 			return this;
 		}
@@ -173,7 +168,7 @@ public class RenderableComponent extends Renderable {
 		this.color = builder.color;
 		this.visible = builder.visible;
 		this.container.addSubreference(this);
-		this.dimensionReferences = new ArrayList<>();
+		this.dimensionReferences = new HashSet<>();
 		
 		registerDimensions();
 	}
@@ -190,7 +185,7 @@ public class RenderableComponent extends Renderable {
 		this.marginY = dimensions.getDimension(DimensionID.MARGIN_Y);
 		this.color = color;
 		this.container.addSubreference(this);
-		this.dimensionReferences = new ArrayList<>();
+		this.dimensionReferences = new HashSet<>();
 		registerDimensions();
 	}
 	

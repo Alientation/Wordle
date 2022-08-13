@@ -1,4 +1,7 @@
-(-) Rework Dimensions to simplify classes and dimensioning objects
+(-) Rework DimensionComponents to simplify repetitive classes
+    -   potentially by making one DimensionComponents class with static objects of DimensionComponents
+        that will return the dimension of a passed object. Will have to refactor Dimension classes too
+        to store subreferences
 (-) Events, Registering Event Handlers, and Passing Events To Handlers
 (-) Add Key/Mouse input events
 (-) Button

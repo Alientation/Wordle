@@ -1,14 +1,15 @@
 package com.alientation.gui.graphics.renderable.dimension;
 
-import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.alientation.gui.graphics.renderable.RenderableComponent;
 import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
 
 public class RelativeDimension implements Dimension {
-	private ArrayList<RenderableComponent> subreferences; //renderablecomponents that have this as a dimension
+	private Set<RenderableComponent> subreferences; //renderablecomponents that have this as a dimension
 	
-	private DimensionComponent relTo;
+	private DimensionComponent relTo; //which dimension is this relative to
 	private float relVal;
 	private int val;
 	
@@ -23,7 +24,7 @@ public class RelativeDimension implements Dimension {
 		this.relVal = relVal;
 		this.min = min;
 		this.max = max;
-		this.subreferences = new ArrayList<>();
+		this.subreferences = new HashSet<>();
 		valueChanged();
 	}
 	

@@ -1,6 +1,8 @@
 package com.alientation.wordle;
 
 import com.alientation.gui.graphics.Window;
+import com.alientation.gui.graphics.events.EventListener;
+import com.alientation.gui.graphics.events.types.MouseClickedEvent;
 import com.alientation.gui.graphics.font.PixelFont;
 import com.alientation.wordle.frames.MainFrame;
 import com.alientation.wordle.frames.old.TextDisplayFrame_OLD;

@@ -131,6 +131,7 @@ public class Renderable {
 	public void updateRender() {
 		if (!reqUpdate)
 			return;
+		reqUpdate = false;
 		render = new BufferedImage(width(),height(),BufferedImage.TYPE_INT_ARGB);
 		Graphics temp = render.createGraphics();
 		for (RenderableComponent r : subreferences)

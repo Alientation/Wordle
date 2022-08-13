@@ -2,9 +2,14 @@ package com.alientation.gui.graphics.events;
 
 import com.alientation.gui.graphics.Window;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Dispatches events first to listeners then to handlers that handle said event
+ */
 public class EventDispatcher {
     /**
      * Window the events are contained within
@@ -38,10 +43,46 @@ public class EventDispatcher {
 
     public void dispatch(Event event) {
         //dispatch to registered event handlers
-        /*if (event.handled)
-            return;
-        if (event.getType() == type)
-            event.handled = handler.onEvent(event);
-        */
+        for (EventListener eventListener : eventListenerList) {
+            if (event.cancelled) return;
+
+            for (Method method : eventListener.getClass().getMethods()) {
+                if (!method.isAnnotationPresent(com.alientation.gui.annotations.EventListener.class) ||
+                        method.getParameterCount() != 1 ||
+                        method.getParameterTypes()[0] != event.getClass()
+                ) continue;
+
+                method.setAccessible(true);
+
+                try {
+                    method.invoke(eventListener,event);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        for (EventHandler eventHandler : eventHandlerList) {
+            if (event.handled || event.cancelled) return;
+
+            for (Method method : eventHandler.getClass().getMethods()) {
+                if (!method.isAnnotationPresent(com.alientation.gui.annotations.EventHandler.class) ||
+                        method.getParameterCount() != 1 ||
+                        method.getParameterTypes()[0] != event.getClass()
+                ) continue;
+
+                method.setAccessible(true);
+
+                try {
+                    event.handled = (Boolean) method.invoke(eventHandler, event);
+                } catch (IllegalAccessException e) {
+                    throw new RuntimeException(e);
+                } catch (InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
     }
 }
