@@ -10,7 +10,7 @@
 
 (-) Background
     -   Background Image
-(-) RenderableImage
+(/) RenderableImage
 (-) Frame
     -   Rounded edges
     -   thickness, color, transparency

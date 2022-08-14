@@ -9,45 +9,63 @@ import java.awt.event.*;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
+import java.io.Serial;
 
 import javax.swing.JFrame;
 
 import com.alientation.gui.graphics.events.EventDispatcher;
-import com.alientation.gui.graphics.events.types.*;
+import com.alientation.gui.graphics.events.types.key.KeyPressedEvent;
+import com.alientation.gui.graphics.events.types.key.KeyReleasedEvent;
+import com.alientation.gui.graphics.events.types.key.KeyTypedEvent;
+import com.alientation.gui.graphics.events.types.mouse.*;
 import com.alientation.gui.graphics.renderable.Renderable;
 
 public class Window extends Canvas implements Runnable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	public static final int INIT_WIDTH = 800, INIT_HEIGHT = 1000, INIT_TPS = 60;
-	public static final String INIT_TITLE = "WORDLE";
+	public static final String INIT_TITLE = "Untitled";
 	public static final String RESOURCE = "res\\";
 	public static final String IMAGES = RESOURCE + "images\\";
 	public static final String FONTS = RESOURCE + "fonts\\";
 	public static Window INIT_WINDOW;
-	
-	protected BufferedImage image;
+
+	protected BufferedImage icon;
+
+	//potentially make these events handled and distributed by eventDispatcher instead
+	protected Render preRender;
+	protected Render render;
+	protected Render postRender;
+
+
 	protected Graphics g;
 	protected BufferStrategy bs;
-	
 	protected Renderable renderable;
 	protected JFrame frame;
 
 	protected int prevWidth, prevHeight;
+	protected EventDispatcher eventDispatcher;
+
+	//run loop
+	protected static final int NANOSECONDS = 1000000000;
+	protected double ns;
 	protected int targetTPS, tps;
 	protected Thread windowThread;
 	protected boolean running;
-	protected EventDispatcher eventDispatcher;
 	
 	
 	public Window(int width, int height, String title) {
-		this(width,height,title,true,true);
+		this(width,height,title,true);
 	}
 	
 	public Window(int width, int height, String title, boolean resizable) {
-		this(width,height,title,resizable,true);
+		this(width,height,title,resizable,true,null,INIT_TPS,null,
+				null,null);
 	}
 	
-	public Window(int width, int height, String title, boolean resizable, boolean visible) {
+	public Window(int width, int height, String title, boolean resizable, boolean visible,
+				  BufferedImage icon, int tps,
+				  Render preRender, Render render, Render postRender) {
 		if (INIT_WINDOW == null)
 			INIT_WINDOW = this;
 		frame = new JFrame(title);
@@ -60,6 +78,9 @@ public class Window extends Canvas implements Runnable {
 		frame.add(this);
 		frame.setVisible(visible);
 		Toolkit.getDefaultToolkit().setDynamicLayout(false);
+
+		targetTPS = tps;
+		updateTimeBetweenTicks();
 
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -122,7 +143,7 @@ public class Window extends Canvas implements Runnable {
 			}
 		});
 
-		eventDispatcher = new EventDispatcher(this);
+		eventDispatcher = new EventDispatcher(this.renderable);
 
 		renderable = new Renderable.Builder().window(this).build();
 	}
@@ -138,9 +159,15 @@ public class Window extends Canvas implements Runnable {
 			resize();
 		}
 	}
+
+	public void updateTimeBetweenTicks() {
+		ns = ((float)NANOSECONDS) / targetTPS;
+	}
 	
 	public void render() {
 		preRender();
+		if (render != null)
+			render.render(g);
 		postRender();
 	}
 	
@@ -151,11 +178,17 @@ public class Window extends Canvas implements Runnable {
 			return;
 		}
 		g = bs.getDrawGraphics();
-		g.setColor(Color.black);
-		g.fillRect(0,0,this.getWidth(),this.getHeight());
+
+		if (render != null)
+			preRender.render(g);
+		else {
+			g.setColor(Color.black);
+			g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		}
 	}
 	
 	public void postRender() {
+		postRender.render(g);
 		g.dispose();
 		bs.show();
 	}
@@ -180,27 +213,26 @@ public class Window extends Canvas implements Runnable {
 	}
 	
 	/**
-	 * Ensures that the specified number of ticks per second is reached while rendering as fast as possible in the remaining time
+	 * Ensures that the specified number of ticks per second is reached while rendering as
+	 * fast as possible in the remaining time
 	 */
 	@Override
 	public void run() {
 		this.requestFocus();
 		long lastTime = System.nanoTime();
-		double amountOfTicks = INIT_TPS;
-		double ns = 1000000000 / amountOfTicks;
-		double delta = 0;
-		long timer = System.currentTimeMillis();
-		int numTicks = 0;
 		long now;
+		long timer = System.currentTimeMillis();
+		double delta = 0;
+		int numTicks = 0;
 		while(this.running) {
 			now = System.nanoTime();
 			delta += (now - lastTime) / ns;
 			lastTime = now;
 			while (delta >= 1) {
 				tick();
+				render();
 				numTicks++;
 				delta--;
-				render();
 			}
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
@@ -210,19 +242,31 @@ public class Window extends Canvas implements Runnable {
 		}
 		stop();
 	}	
-	public Graphics getGraphics() { 
-		return this.g; 
+	public Graphics getGraphics() { return this.g; }
+	public Renderable getRenderable() { return this.renderable; }
+	public void setRenderable(Renderable renderable) { this.renderable = renderable; }
+	public int getTPS() { return tps; }
+	public BufferedImage getIcon() { return icon; }
+	public void setIcon(BufferedImage icon) {
+		this.icon = icon;
+		frame.setIconImage(icon);
 	}
-	
-	public Renderable getRenderable() {
-		return this.renderable;
+	public int getTargetTPS() { return targetTPS; }
+
+	public void setTargetTPS(int targetTPS) {
+		this.targetTPS = targetTPS;
+		updateTimeBetweenTicks();
 	}
-	
-	public void setRenderable(Renderable renderable) {
-		this.renderable = renderable;
-	}
-	
-	public int getTPS() {
-		return tps;
-	}
+	public int getPrevWidth() { return prevWidth; }
+	public int getPrevHeight() { return prevHeight; }
+	public EventDispatcher getEventDispatcher() { return eventDispatcher; }
+	public double getNs() { return ns; }
+	public int getTps() { return tps; }
+	public boolean isRunning() { return running; }
+	public Render getPreRender() { return preRender; }
+	public void setPreRender(Render preRender) { this.preRender = preRender; }
+	public Render getRender() { return render; }
+	public void setRender(Render render) { this.render = render; }
+	public Render getPostRender() { return postRender; }
+	public void setPostRender(Render postRender) { this.postRender = postRender; }
 }

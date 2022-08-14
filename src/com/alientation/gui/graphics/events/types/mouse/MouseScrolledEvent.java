@@ -1,7 +1,6 @@
-package com.alientation.gui.graphics.events.types;
+package com.alientation.gui.graphics.events.types.mouse;
 
 import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.events.Event;
 
 import java.awt.event.MouseEvent;
 

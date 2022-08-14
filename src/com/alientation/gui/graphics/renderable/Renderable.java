@@ -25,7 +25,6 @@ public class Renderable {
 	protected boolean reqUpdate;
 	protected ArrayList<RenderableComponent> subreferences;
 	protected String id;
-	
 	public Renderable(Builder builder) {
 		this.window = builder.window;
 		this.render = builder.render;
@@ -85,7 +84,10 @@ public class Renderable {
 	}
 	
 	/**
+	 * TODO optimization
 	 *
+	 * if this renderable requires an update, all sub renderable will also require an update
+	 * no matter their individual states
 	 */
 	public void updateRender() {
 		if (!reqUpdate)

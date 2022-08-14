@@ -9,6 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.alientation.gui.graphics.Window;
+import com.alientation.gui.graphics.events.EventDispatcher;
 import com.alientation.gui.graphics.renderable.dimension.*;
 import com.alientation.gui.graphics.renderable.dimension.component.*;
 
@@ -44,6 +45,8 @@ public class RenderableComponent extends Renderable {
 	protected RenderableBackground background;
 	protected RenderableFrame frame;
 
+	protected EventDispatcher eventDispatcher;
+
 	/**
 	 * TODO: fix builder class in other renderable classes
 	 */
@@ -60,6 +63,7 @@ public class RenderableComponent extends Renderable {
 
 		this.background = new RenderableBackground(this, builder.backgroundImage, builder.backgroundColor, builder.backgroundTransparency);
 		this.frame = new RenderableFrame(this, builder.x, builder.y, builder.width, builder.height, builder.radius, builder.thickness, builder.frameColor, builder.frameTransparency);
+		this.eventDispatcher = new EventDispatcher(this);
 		registerDimensions();
 	}
 	
@@ -98,12 +102,16 @@ public class RenderableComponent extends Renderable {
 	public void render(Graphics g) {
 		//if (this.visible)
 			//g.drawImage(render(),x(), y(), null);
-			
+
+
 		g.setColor(background.getColor());
 		g.fillRect(x(), y(), width(), height());
 		super.render(g);
 	}
-	
+
+	/**
+	 * TODO
+	 */
 	public void updateRender() {
 		if (!reqUpdate)
 			return;
@@ -117,13 +125,8 @@ public class RenderableComponent extends Renderable {
 			temp.drawImage(r.render(), r.x(), r.y(), null);
 	}
 
-	public void addDimensionReference(DimensionComponent d) {
-		this.dimensionReferences.add(d);
-	}
-	
-	public void removeDimensionReference(DimensionComponent d) {
-		this.dimensionReferences.remove(d);
-	}
+	public void addDimensionReference(DimensionComponent d) { this.dimensionReferences.add(d); }
+	public void removeDimensionReference(DimensionComponent d) { this.dimensionReferences.remove(d); }
 	
 	@Override
 	public String toString() {
@@ -132,40 +135,22 @@ public class RenderableComponent extends Renderable {
 	
 	public RenderableComponent setVisibility(boolean visible) {
 		this.visible = visible;
+		window.getRenderable().reqUpdate = true;
 		return this;
 	}
 	
-	public boolean getVisibility() {
-		return this.visible;
-	}
-	
-	/*
-	 * Area
-	 */
-	public Rectangle getSafeArea() {
-		return new Rectangle(safeX(),safeY(),safeWidth(),safeHeight());
-	}
-	
-	public Rectangle getArea() {
-		return new Rectangle(x(),y(),width(),height());
-	}
-	
-	/*
-	 * Container
-	 */
+	public boolean getVisibility() { return this.visible; }
+	public Rectangle getSafeArea() { return new Rectangle(safeX(),safeY(),safeWidth(),safeHeight()); }
+	public Rectangle getArea() { return new Rectangle(x(),y(),width(),height()); }
+
 	public RenderableComponent setContainer(RenderableComponent container) {
 		this.container = container;
 		this.reqUpdate = true;
 		return this;
 	}
 	
-	public Renderable getContainer() {
-		return this.container;
-	}
-	
-	/*
-	 * Color
-	 */
+	public Renderable getContainer() { return this.container; }
+
 	public RenderableComponent setBackgroundColor(Color color) {
 		this.background.setColor(color);
 		this.reqUpdate = true;
@@ -190,33 +175,13 @@ public class RenderableComponent extends Renderable {
 		return this;
 	}
 	
-	public Color getBackgroundColor() {
-		return background.getColor();
-	}
-
-	public Color getFrameColor() {
-		return frame.getColor();
-	}
-
-	public float getBackgroundTransparency() {
-		return background.getTransparency();
-	}
-
-	public float getFrameTransparency() {
-		return frame.getTransparency();
-	}
-
-	public RenderableBackground getBackground() {
-		return background;
-	}
-
-	public RenderableFrame getFrame() {
-		return frame;
-	}
-	
-	public void reqUpdate() {
-		this.reqUpdate = true;
-	}
+	public Color getBackgroundColor() { return background.getColor(); }
+	public Color getFrameColor() { return frame.getColor(); }
+	public float getBackgroundTransparency() { return background.getTransparency(); }
+	public float getFrameTransparency() { return frame.getTransparency(); }
+	public RenderableBackground getBackground() { return background; }
+	public RenderableFrame getFrame() { return frame; }
+	public void reqUpdate() { this.reqUpdate = true; }
 
 	public RenderableComponent setX(Dimension x) {
 		if (frame.getX() instanceof RelativeDimension)
@@ -227,26 +192,11 @@ public class RenderableComponent extends Renderable {
 			this.dimensionReferences.add(((RelativeDimension) frame.getX()).getRelTo());
 		return this;
 	}
-	
-	public Dimension getX() {
-		return frame.getX();
-	}
-	
-	public int x() {
-		return frame.getX().val() + container.safeX();
-	}
-	
-	public int relX() {
-		return frame.getX().val();
-	}
-	
-	public int safeX() {
-		return frame.getX().val() + container.safeX() + marginX.val();
-	}
-	
-	/*
-	 * Y
-	 */
+	public Dimension getX() { return frame.getX(); }
+	public int x() { return frame.getX().val() + container.safeX(); }
+	public int relX() { return frame.getX().val(); }
+	public int safeX() { return frame.getX().val() + container.safeX() + marginX.val(); }
+
 	public RenderableComponent setY(Dimension y) {
 		if (frame.getY() instanceof RelativeDimension)
 			this.dimensionReferences.remove(((RelativeDimension) frame.getY()).getRelTo());
@@ -256,26 +206,11 @@ public class RenderableComponent extends Renderable {
 			this.dimensionReferences.add(((RelativeDimension) frame.getY()).getRelTo());
 		return this;
 	}
-	
-	public Dimension getY() {
-		return frame.getY();
-	}
-	
-	public int y() {
-		return frame.getY().val() + container.safeY();
-	}
-	
-	public int relY() {
-		return frame.getY().val();
-	}
-	
-	public int safeY() {
-		return frame.getY().val() + container.safeY() + marginY.val();
-	}
-	
-	/*
-	 * Width
-	 */
+	public Dimension getY() { return frame.getY(); }
+	public int y() { return frame.getY().val() + container.safeY(); }
+	public int relY() { return frame.getY().val(); }
+	public int safeY() { return frame.getY().val() + container.safeY() + marginY.val(); }
+
 	public RenderableComponent setWidth(Dimension width) {
 		if (frame.getWidth() instanceof RelativeDimension)
 			this.dimensionReferences.remove(((RelativeDimension) frame.getWidth()).getRelTo());
@@ -285,22 +220,12 @@ public class RenderableComponent extends Renderable {
 			this.dimensionReferences.add(((RelativeDimension) frame.getWidth()).getRelTo());
 		return this;
 	}
-	
-	public Dimension getWidth() {
-		return frame.getWidth();
-	}
-	
-	public int width() {
-		return frame.getWidth().val();
-	}
-	
+	public Dimension getWidth() { return frame.getWidth(); }
+	public int width() { return frame.getWidth().val(); }
 	public int safeWidth() {
 		return frame.getWidth().val() - marginX.val() * 2;
 	}
-	
-	/*
-	 * Height
-	 */
+
 	public RenderableComponent setHeight(Dimension height) {
 		if (frame.getHeight() instanceof RelativeDimension)
 			this.dimensionReferences.remove(((RelativeDimension) frame.getHeight()).getRelTo());
@@ -310,22 +235,10 @@ public class RenderableComponent extends Renderable {
 			this.dimensionReferences.add(((RelativeDimension) frame.getHeight()).getRelTo());
 		return this;
 	}
-	
-	public Dimension getHeight() {
-		return frame.getHeight();
-	}
-	
-	public int height() {
-		return frame.getHeight().val();
-	}
-	
-	public int safeHeight() {
-		return frame.getHeight().val() - marginY.val() * 2;
-	}
-	
-	/*
-	 * Margin
-	 */
+	public Dimension getHeight() { return frame.getHeight(); }
+	public int height() { return frame.getHeight().val(); }
+	public int safeHeight() { return frame.getHeight().val() - marginY.val() * 2; }
+
 	public RenderableComponent setMarginX(Dimension marginX) {
 		if (this.marginX instanceof RelativeDimension)
 			this.dimensionReferences.remove(((RelativeDimension) this.marginX).getRelTo());
@@ -335,14 +248,8 @@ public class RenderableComponent extends Renderable {
 			this.dimensionReferences.add(((RelativeDimension) this.marginX).getRelTo());
 		return this;
 	}
-	
-	public Dimension getMarginX() {
-		return this.marginX;
-	}
-	
-	public int marginX() {
-		return this.marginX.val();
-	}
+	public Dimension getMarginX() { return this.marginX; }
+	public int marginX() { return this.marginX.val(); }
 	
 	public RenderableComponent setMarginY(Dimension marginY) {
 		if (this.marginY instanceof RelativeDimension)
@@ -353,14 +260,8 @@ public class RenderableComponent extends Renderable {
 			this.dimensionReferences.add(((RelativeDimension) this.marginY).getRelTo());
 		return this;
 	}
-	
-	public Dimension getMarginY() {
-		return this.marginY;
-	}
-	
-	public int marginY() {
-		return this.marginY.val();
-	}
+	public Dimension getMarginY() { return this.marginY; }
+	public int marginY() { return this.marginY.val(); }
 
 	public RenderableComponent setRadius(Dimension radius) {
 		if (frame.getRadius() instanceof RelativeDimension)
@@ -371,14 +272,8 @@ public class RenderableComponent extends Renderable {
 			this.dimensionReferences.add(((RelativeDimension) frame.getRadius()).getRelTo());
 		return this;
 	}
-
-	public Dimension getRadius() {
-		return frame.getRadius();
-	}
-
-	public int radius() {
-		return frame.getRadius().val();
-	}
+	public Dimension getRadius() { return frame.getRadius(); }
+	public int radius() { return frame.getRadius().val(); }
 
 	public RenderableComponent setThickness(Dimension thickness) {
 		if (frame.getThickness() instanceof RelativeDimension)
@@ -389,15 +284,8 @@ public class RenderableComponent extends Renderable {
 			this.dimensionReferences.add(((RelativeDimension) frame.getThickness()).getRelTo());
 		return this;
 	}
-
-	public Dimension getThickness() {
-		return frame.getThickness();
-	}
-
-	public int thickness() {
-		return frame.getThickness().val();
-	}
-
+	public Dimension getThickness() { return frame.getThickness(); }
+	public int thickness() { return frame.getThickness().val(); }
 
 	public static class Builder extends Renderable.Builder{
 		protected Renderable container;

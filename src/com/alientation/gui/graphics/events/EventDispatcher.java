@@ -1,6 +1,6 @@
 package com.alientation.gui.graphics.events;
 
-import com.alientation.gui.graphics.Window;
+import com.alientation.gui.graphics.renderable.Renderable;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -12,9 +12,10 @@ import java.util.List;
  */
 public class EventDispatcher {
     /**
-     * Window the events are contained within
+     * Renderable the events are contained within
      */
-    private Window window;
+    private final Renderable renderable;
+
 
     /**
      * List of event listeners that is used to access events before it is handled
@@ -25,8 +26,8 @@ public class EventDispatcher {
      * List of event handlers that is used to handle the events with appropriate responses
      */
     private List<EventHandler> eventHandlerList;
-    public EventDispatcher(Window window) {
-        this.window = window;
+    public EventDispatcher(Renderable renderable) {
+        this.renderable = renderable;
         this.eventListenerList = new ArrayList<>();
         this.eventHandlerList = new ArrayList<>();
     }
@@ -56,9 +57,7 @@ public class EventDispatcher {
 
                 try {
                     method.invoke(eventListener,event);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
             }
@@ -77,9 +76,7 @@ public class EventDispatcher {
 
                 try {
                     event.handled = (Boolean) method.invoke(eventHandler, event);
-                } catch (IllegalAccessException e) {
-                    throw new RuntimeException(e);
-                } catch (InvocationTargetException e) {
+                } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
             }
