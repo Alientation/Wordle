@@ -62,9 +62,13 @@ public class RenderableComponent extends Renderable {
 		this.visible = builder.visible;
 		this.container.addSubreference(this);
 		this.dimensionReferences = builder.dimensionReferences;
+		this.zIndex = builder.zIndex;
 
-		this.background = new RenderableBackground(this, builder.backgroundImage, builder.backgroundColor, builder.backgroundTransparency);
-		this.frame = new RenderableFrame(this, builder.x, builder.y, builder.width, builder.height, builder.radius, builder.thickness, builder.frameColor, builder.frameTransparency);
+		this.background = new RenderableBackground(this, builder.backgroundImage, builder.backgroundColor,
+				builder.backgroundTransparency);
+		this.frame = new RenderableFrame(this, builder.x, builder.y, builder.width, builder.height,
+				builder.radius, builder.thickness, builder.frameColor, builder.frameTransparency);
+
 		this.eventDispatcher = new EventDispatcher(this);
 		registerDimensions();
 	}
@@ -83,7 +87,8 @@ public class RenderableComponent extends Renderable {
 	}
 	
 	public void registerDimensions() {
-		registerDimensions(marginX,marginY, frame.getX(), frame.getY(), frame.getWidth(), frame.getHeight(), frame.getRadius(), frame.getThickness());
+		registerDimensions(marginX,marginY, frame.getX(), frame.getY(), frame.getWidth(), frame.getHeight(), frame.getRadius(),
+				frame.getThickness());
 	}
 	
 	protected void registerDimensions(Dimension... ds) {
@@ -99,6 +104,22 @@ public class RenderableComponent extends Renderable {
 		super.resized();
 		for (DimensionComponent d : this.dimensionReferences)
 			d.valueChanged();
+	}
+
+	/**
+	 * Dynamically update Z Index if required
+	 */
+	@Override
+	public void reorderZIndexing(int pastZIndex) {
+		if (!requireZIndexUpdate || !dynamicZIndexing)
+			return;
+		if (this.zIndex <= pastZIndex) {
+			this.zIndex = pastZIndex + 1;
+			this.window.setUpdateWindowRenderer(true);
+		}
+		this.requireZIndexUpdate = false;
+		for (RenderableComponent renderableComponent : subreferences)
+			renderableComponent.reorderZIndexing(this.zIndex);
 	}
 
 	public void render(Graphics g) {
@@ -135,7 +156,8 @@ public class RenderableComponent extends Renderable {
 	
 	@Override
 	public String toString() {
-		return container.id() + " -> " + id + ":{" + "(x,y): (" + x() + "," + y() + ") - (w,h): (" + width() + "," + height() + ") - (mX,mY): (" + marginX() + "," + marginY() + ")}";
+		return container.id() + " -> " + id + ":{" + "(x,y): (" + x() + "," + y() + ") - (w,h): (" + width() + "," +
+				height() + ") - (mX,mY): (" + marginX() + "," + marginY() + ")}";
 	}
 
 	//todo fix the bugs
@@ -309,17 +331,22 @@ public class RenderableComponent extends Renderable {
 	}
 	public Dimension getThickness() { return frame.getThickness(); }
 	public int thickness() { return frame.getThickness().val(); }
-
+	public int getZIndex() { return zIndex; }
+	public void setZIndex(int zIndex) {
+		this.zIndex = zIndex;
+		this.container.requireZIndexUpdate = true;
+		this.container.requireRenderUpdate = true;
+	}
 
 	public static class Builder<T extends Builder<T>> extends Renderable.Builder<T> {
 		protected Renderable container;
 		protected Dimension x,y,width,height,marginX,marginY,radius,thickness;
 		protected Color backgroundColor, frameColor;
-		protected boolean visible;
+		protected boolean visible = true;
 		protected float backgroundTransparency, frameTransparency;
 		protected RenderableImage backgroundImage;
 		protected Set<DimensionComponent> dimensionReferences;
-		protected int zIndex;
+		protected int zIndex = 0;
 
 		public Builder() {
 			this.dimensionReferences = new HashSet<>();

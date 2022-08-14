@@ -71,9 +71,7 @@ public class Game extends Window {
 	
 	@Override
 	public void render() {
-		preRender();
-		this.renderable.render(g);
-		postRender();
+		super.render();
 	}
 	
 	@Override

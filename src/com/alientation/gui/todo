@@ -7,19 +7,22 @@
 (/) Events, Registering Event Handlers, and Passing Events To Handlers
 (/) Add Key/Mouse input events
 (/) Background
-    -   Background Image
+    /   Background Image
 (/) RenderableImage
+(/) Rework Builder Pattern
+    /   Use Generics to reduce repetitive code
+(/) Z-Indexing
+    /   Allow users to customize the z index of each renderable, while also on adjusting as needed in runtime
+        /   boolean dynamicZIndexing?
+(/) Custom Window Renderer Class
+    /   Stores the order renderables should be rendered in
+    /   window render will just call this render
 
 
-(-) Z-Indexing
-    -   Allow users to customize the z index of each renderable, while also on adjusting as needed in runtime
-        -   boolean dynamicZIndexing?
-    -   Every renderable's render method will be passed a WindowRender object that it will request a specified dimensioned graphics render
-        then draw on it and return it
-            -   the specified dimensioned graphics render will store the real x and y of itself compared to the window and the z index
-(-) Custom Window Renderer Class
-    -   Compiles all sub renderables graphics render and their associated z index
-    -   sorts it to then render from bottom to top
+(-) Fix JFrame/Window flickering when resizing/moving the window up
+    x   Think it is caused by JFrame rendering without the window container rendering
+    -   Actually think it is caused by the renderable, only happens when resizing the window to where
+        it is smaller than before on one dimension
 (-) Frame
     -   Rounded edges
     -   thickness, color, transparency

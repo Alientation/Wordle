@@ -20,10 +20,17 @@ public class Renderable {
 	//The BufferedImage that details this renderable only, dimensions equal to the dimension of this renderable.
 	// Used for z ordering and rendering optimization. Still in development
 	protected BufferedImage render;
+	//whether this renderable needs to update the render because this and/or subreferences were changed visually
 	protected boolean requireRenderUpdate;
+	//whether this renderable needs to reorder the z indexes because this and/or subreferences were updated
 	protected boolean requireZIndexUpdate;
+	//allows for the z index to be updated as needed
+	protected boolean dynamicZIndexing;
 
+	//RenderableComponents that are contained within the bounds of this renderable
 	protected ArrayList<RenderableComponent> subreferences;
+
+	//Unique id potentially for later to store and load guis from data files
 	protected String id;
 	public Renderable(Builder<?> builder) {
 		this.window = builder.window;
@@ -31,6 +38,7 @@ public class Renderable {
 		this.subreferences = builder.subreferences;
 		this.requireRenderUpdate = true;
 		this.requireZIndexUpdate = true;
+		this.dynamicZIndexing = builder.dynamicZIndexing;
 		this.id = builder.id;
 	}
 	
@@ -60,16 +68,18 @@ public class Renderable {
 		return this;
 	}
 	
-	public ArrayList<RenderableComponent> getSubreferences() {
-		return this.subreferences;
+	public ArrayList<RenderableComponent> getSubreferences() { return this.subreferences; }
+
+	/**
+	 * Dynamically update Z Index if required
+	 */
+	public void reorderZIndexing(int pastZIndex) {
+		if (!requireZIndexUpdate || !dynamicZIndexing)
+			return;
+		this.requireZIndexUpdate = false;
+		for (RenderableComponent renderableComponent : subreferences)
+			renderableComponent.reorderZIndexing(pastZIndex + 1);
 	}
-
-
-	public void reorderZIndexing() {
-
-
-	}
-
 
 	/**
 	 * TODO: implement
@@ -131,7 +141,8 @@ public class Renderable {
 	
 	@Override
 	public String toString() {
-		return window.getName() + " -> " + id + ":{" + "(x,y): (" + x() + "," + y() + ") - (w,h): (" + width() + "," + height() + ") - (mX,mY): (" + marginX() + "," + marginY() + ")}";
+		return window.getName() + " -> " + id + ":{" + "(x,y): (" + x() + "," + y() + ") - (w,h): (" + width() +
+				"," + height() + ") - (mX,mY): (" + marginX() + "," + marginY() + ")}";
 	}
 	
 	/**
@@ -149,14 +160,17 @@ public class Renderable {
 	public Rectangle getArea() { return new Rectangle(x(),y(),width(),height()); }
 	
 	/**
-	 * Returns the absolute x position of this component relative to the canvas. Initially the renderable base is only contained within the window which is essentially the canvas, so x position is that of the window. Should be 0.
+	 * Returns the absolute x position of this component relative to the canvas.
+	 * Initially the renderable base is only contained within the window which is essentially the canvas,
+	 * so x position is that of the window. Should be 0.
 	 * 
 	 * @return x position
 	 */
 	public int x() { return this.window.getX(); }
 	
 	/**
-	 * Returns the relative x position of this component relative to the container. Initially the renderable base is only contained within the window which is essentially the canvas.
+	 * Returns the relative x position of this component relative to the container.
+	 * Initially the renderable base is only contained within the window which is essentially the canvas.
 	 * 
 	 * @return relative x position to the container
 	 */
@@ -170,14 +184,17 @@ public class Renderable {
 	public int safeX() { return this.window.getX(); }
 	
 	/**
-	 * Returns the absolute y position of this component relative to the canvas. Initially the renderable base is only contained within the window which is essentially the canvas, so y position is that of the window. Should be 0.
+	 * Returns the absolute y position of this component relative to the canvas.
+	 * Initially the renderable base is only contained within the window which is essentially the canvas,
+	 * so y position is that of the window. Should be 0.
 	 * 
 	 * @return y position
 	 */
 	public int y() { return this.window.getY(); }
 	
 	/**
-	 * Returns the relative y position of this component relative to the container. Initially the renderable base is only contained within the window which is essentially the canvas.
+	 * Returns the relative y position of this component relative to the container.
+	 * Initially the renderable base is only contained within the window which is essentially the canvas.
 	 * 
 	 * @return relative y position to the container
 	 */
@@ -239,6 +256,13 @@ public class Renderable {
 	 */
 	public String id() { return this.id; }
 
+	public boolean requireRenderUpdate() { return requireRenderUpdate; }
+	public void setRequireRenderUpdate(boolean requireRenderUpdate) { this.requireRenderUpdate = requireRenderUpdate; }
+	public boolean requireZIndexUpdate() { return requireZIndexUpdate; }
+	public void setRequireZIndexUpdate(boolean requireZIndexUpdate) { this.requireZIndexUpdate = requireZIndexUpdate; }
+	public boolean doDynamicZIndexing() { return dynamicZIndexing; }
+	public void setDynamicZIndexing(boolean dynamicZIndexing) { this.dynamicZIndexing = dynamicZIndexing; }
+
 	/**
 	 * How to subclass Builder pattern classes
 	 * <a href="https://stackoverflow.com/questions/17164375/subclassing-a-java-builder-class/34741836#34741836">...</a>
@@ -250,6 +274,7 @@ public class Renderable {
 		protected BufferedImage render;
 		protected ArrayList<RenderableComponent> subreferences;
 		protected String id;
+		protected boolean dynamicZIndexing;
 
 		public Builder() {
 			this.subreferences = new ArrayList<>();
@@ -277,6 +302,11 @@ public class Renderable {
 
 		public T id(String id) {
 			this.id = id;
+			return (T) this;
+		}
+
+		public T dynamicZIndexing(boolean dynamicZIndexing) {
+			this.dynamicZIndexing = dynamicZIndexing;
 			return (T) this;
 		}
 

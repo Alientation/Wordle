@@ -34,16 +34,12 @@ public class Window extends Canvas implements Runnable {
 
 	protected BufferedImage icon;
 
-	//potentially make these events handled and distributed by eventDispatcher instead
-	protected Render preRender;
-	protected Render render;
-	protected Render postRender;
-
-
 	protected Graphics g;
 	protected BufferStrategy bs;
 	protected Renderable renderable;
 	protected JFrame frame;
+	protected WindowRenderer windowRenderer;
+	protected boolean updateWindowRenderer = true;
 
 	protected int prevWidth, prevHeight;
 	protected EventDispatcher eventDispatcher;
@@ -78,6 +74,7 @@ public class Window extends Canvas implements Runnable {
 		frame.add(this);
 		frame.setVisible(visible);
 		Toolkit.getDefaultToolkit().setDynamicLayout(false);
+		frame.setIgnoreRepaint(true);
 
 		targetTPS = tps;
 		updateTimeBetweenTicks();
@@ -106,6 +103,7 @@ public class Window extends Canvas implements Runnable {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				MouseClickedEvent event = new MouseClickedEvent(renderable, e);
+				System.out.println("begin click");
 				eventDispatcher.dispatch(event);
 			}
 			@Override
@@ -144,6 +142,7 @@ public class Window extends Canvas implements Runnable {
 		});
 
 		eventDispatcher = new EventDispatcher(this.renderable);
+		windowRenderer = new WindowRenderer(this);
 
 		renderable = new Renderable.Builder().window(this).build();
 	}
@@ -158,6 +157,10 @@ public class Window extends Canvas implements Runnable {
 			prevHeight = this.getHeight();
 			resize();
 		}
+		renderable.reorderZIndexing(0);
+		if (updateWindowRenderer) {
+			windowRenderer.update();
+		}
 	}
 
 	public void updateTimeBetweenTicks() {
@@ -166,6 +169,9 @@ public class Window extends Canvas implements Runnable {
 	
 	public void render() {
 		preRender();
+		//this.renderable.render(g);
+		frame.repaint();
+		windowRenderer.render(g);
 		postRender();
 	}
 	
@@ -226,13 +232,29 @@ public class Window extends Canvas implements Runnable {
 				numTicks++;
 				delta--;
 			}
+
+			//update tps (fps too since they are the same as of right now)
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				this.tps = numTicks;
 				numTicks = 0;
 			}
+
+			//so that the cpu doesn't waste resources
+			sync(System.nanoTime(), delta);
 		}
 		stop();
+	}
+
+	public void sync(long loopStartTime, double delta) {
+		double endTime = loopStartTime + (1f - delta) * ns;
+		while (System.nanoTime() < endTime) {
+			try {
+				Thread.sleep(3);
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
 	}
 
 	public void registerEventListener(EventListener eventListener) { this.eventDispatcher.registerEventListener(eventListener); }
@@ -258,10 +280,5 @@ public class Window extends Canvas implements Runnable {
 	public double getNs() { return ns; }
 	public int getTps() { return tps; }
 	public boolean isRunning() { return running; }
-	public Render getPreRender() { return preRender; }
-	public void setPreRender(Render preRender) { this.preRender = preRender; }
-	public Render getRender() { return render; }
-	public void setRender(Render render) { this.render = render; }
-	public Render getPostRender() { return postRender; }
-	public void setPostRender(Render postRender) { this.postRender = postRender; }
+	public void setUpdateWindowRenderer(boolean updateWindowRenderer) { this.updateWindowRenderer = updateWindowRenderer; }
 }

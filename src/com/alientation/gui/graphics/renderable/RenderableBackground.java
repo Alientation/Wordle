@@ -20,35 +20,12 @@ public class RenderableBackground {
     }
 
 
-    public RenderableComponent getContainer() {
-        return container;
-    }
-
-    public void setContainer(RenderableComponent container) {
-        this.container = container;
-    }
-
-    public RenderableImage getImage() {
-        return image;
-    }
-
-    public void setImage(RenderableImage image) {
-        this.image = image;
-    }
-
-    public Color getColor() {
-        return color;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
-    }
-
-    public float getTransparency() {
-        return transparency;
-    }
-
-    public void setTransparency(float transparency) {
-        this.transparency = transparency;
-    }
+    public RenderableComponent getContainer() { return container; }
+    public void setContainer(RenderableComponent container) { this.container = container; }
+    public RenderableImage getImage() { return image; }
+    public void setImage(RenderableImage image) { this.image = image; }
+    public Color getColor() { return color; }
+    public void setColor(Color color) { this.color = color; }
+    public float getTransparency() { return transparency; }
+    public void setTransparency(float transparency) { this.transparency = transparency; }
 }
