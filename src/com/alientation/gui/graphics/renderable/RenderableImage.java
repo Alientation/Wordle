@@ -1,8 +1,5 @@
 package com.alientation.gui.graphics.renderable;
 
-import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.renderable.dimension.Dimension;
-import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
 import com.twelvemonkeys.image.ResampleOp;
 
 import javax.imageio.ImageIO;
@@ -11,10 +8,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 
 public class RenderableImage extends RenderableComponent {
-    private String imagePath;
+    private final String imagePath;
     private BufferedImage bufferedImage, originalImage;
 
     public RenderableImage(Builder builder) {
@@ -47,12 +43,12 @@ public class RenderableImage extends RenderableComponent {
 
     /**
      * Perform Lanczos Resizing
-     * https://stackoverflow.com/questions/24745147/java-resize-image-without-losing-quality
+     * <a href="https://stackoverflow.com/questions/24745147/java-resize-image-without-losing-quality">...</a>
      *
      */
     public void updateImage() {
-        BufferedImageOp resampler = new ResampleOp(safeWidth(), safeHeight(), ResampleOp.FILTER_LANCZOS);
-        bufferedImage = resampler.filter(originalImage,null);
+        BufferedImageOp sampler = new ResampleOp(safeWidth(), safeHeight(), ResampleOp.FILTER_LANCZOS);
+        bufferedImage = sampler.filter(originalImage,null);
     }
 
     public String getImagePath() {
@@ -62,7 +58,7 @@ public class RenderableImage extends RenderableComponent {
         return bufferedImage;
     }
 
-    public static class Builder extends RenderableComponent.Builder {
+    public static class Builder<T extends Builder<T>> extends RenderableComponent.Builder<T> {
         protected String imagePath;
         protected BufferedImage bufferedImage;
         protected BufferedImage originalImage;
@@ -70,134 +66,19 @@ public class RenderableImage extends RenderableComponent {
         public Builder() {
 
         }
-
-        public Builder window(Window window) {
-            super.window(window);
-            return this;
-        }
-
-        public Builder subreference(RenderableComponent renderable) {
-            super.subreference(renderable);
-            return this;
-        }
-
-        public Builder subreferences(Collection<RenderableComponent> renderables) {
-            super.subreferences(renderables);
-            return this;
-        }
-
-        public Builder render(BufferedImage render) {
-            super.render(render);
-            return this;
-        }
-
-        public Builder id(String id) {
-            super.id(id);
-            return this;
-        }
-
-        public Builder dimensionReference(DimensionComponent dc) {
-            super.dimensionReference(dc);
-            return this;
-        }
-
-        public Builder dimensionReferences(Collection<DimensionComponent> dimensions) {
-            super.dimensionReferences(dimensions);
-            return this;
-        }
-
-        public Builder container(Renderable container) {
-            super.container(container);
-            return this;
-        }
-
-        public Builder x(com.alientation.gui.graphics.renderable.dimension.Dimension x) {
-            super.x(x);
-            return this;
-        }
-
-        public Builder y(com.alientation.gui.graphics.renderable.dimension.Dimension y) {
-            super.y(y);
-            return this;
-        }
-
-        public Builder width(com.alientation.gui.graphics.renderable.dimension.Dimension width) {
-            super.width(width);
-            return this;
-        }
-
-        public Builder height(com.alientation.gui.graphics.renderable.dimension.Dimension height) {
-            super.height(height);
-            return this;
-        }
-
-        public Builder marginX(com.alientation.gui.graphics.renderable.dimension.Dimension marginX) {
-            super.marginX(marginX);
-            return this;
-        }
-
-        public Builder marginY(com.alientation.gui.graphics.renderable.dimension.Dimension marginY) {
-            super.marginY(marginY);
-            return this;
-        }
-
-        public Builder radius(com.alientation.gui.graphics.renderable.dimension.Dimension radius) {
-            super.radius(radius);
-            return this;
-        }
-
-        public Builder thickness(Dimension thickness) {
-            super.thickness(thickness);
-            return this;
-        }
-
-        public Builder backgroundTransparency(float backgroundTransparency) {
-            super.backgroundTransparency(backgroundTransparency);
-            return this;
-        }
-
-        public Builder frameTransparency(float frameTransparency) {
-            super.frameTransparency(frameTransparency);
-            return this;
-        }
-
-        public Builder backgroundImage(RenderableImage backgroundImage) {
-            super.backgroundImage(backgroundImage);
-            return this;
-        }
-
-        public Builder backgroundColor(Color backgroundColor) {
-            super.backgroundColor(backgroundColor);
-            return this;
-        }
-
-        public Builder frameColor(Color frameColor) {
-            super.frameColor(frameColor);
-            return this;
-        }
-
-        public Builder visible(boolean visible) {
-            super.visible(visible);
-            return this;
-        }
-
-        public Builder zIndex(int zIndex) {
-            super.zIndex(zIndex);
-            return this;
-        }
-        public Builder imagePath(String imagePath) {
+        public T imagePath(String imagePath) {
             this.imagePath = imagePath;
-            return this;
+            return (T) this;
         }
 
-        public Builder bufferedImage(BufferedImage bufferedImage) {
+        public T bufferedImage(BufferedImage bufferedImage) {
             this.bufferedImage = bufferedImage;
-            return this;
+            return (T) this;
         }
 
-        public Builder originalImage(BufferedImage originalImage) {
+        public T originalImage(BufferedImage originalImage) {
             this.originalImage = originalImage;
-            return this;
+            return (T) this;
         }
 
         public RenderableImage build() throws IllegalStateException {

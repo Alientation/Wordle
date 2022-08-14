@@ -8,7 +8,7 @@ import com.alientation.gui.graphics.renderable.RenderableComponent;
 public class SettingFrame{
 	private RenderableComponent renderable;
 	public SettingFrame(Renderable container) {
-		setRenderable(new RenderableComponent.Builder()
+		setRenderable(new RenderableComponent.Builder<>()
 				.container(container)
 				.backgroundColor(Color.LIGHT_GRAY)
 				.build());

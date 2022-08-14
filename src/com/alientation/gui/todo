@@ -10,6 +10,7 @@
     -   Background Image
 (/) RenderableImage
 
+
 (-) Z-Indexing
     -   Allow users to customize the z index of each renderable, while also on adjusting as needed in runtime
         -   boolean dynamicZIndexing?

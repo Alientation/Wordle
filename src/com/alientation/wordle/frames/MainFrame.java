@@ -21,7 +21,7 @@ public class MainFrame {
 	private SettingFrame settingsFrame;
 	
 	public MainFrame(Renderable container) {
-		renderable = new RenderableStack.Builder()
+		renderable = new RenderableStack.Builder<>()
 				.container(container)
 				.x(new RelativeDimension(new DimensionSafeX(container),1f))
 				.y(new RelativeDimension(new DimensionSafeY(container),1f))
@@ -37,7 +37,7 @@ public class MainFrame {
 		
 		settingsFrame = new SettingFrame(renderable);
 		
-		wordleKeyboardStack = new RenderableStack.Builder()
+		wordleKeyboardStack = new RenderableStack.Builder<>()
 				.container(renderable)
 				.spacing(new StaticDimension(5))
 				.backgroundColor(Color.PINK)

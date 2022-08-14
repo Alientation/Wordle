@@ -61,13 +61,11 @@ public class Window extends Canvas implements Runnable {
 	}
 	
 	public Window(int width, int height, String title, boolean resizable) {
-		this(width,height,title,resizable,true,null,INIT_TPS,null,
-				null,null);
+		this(width,height,title,resizable,true,null,INIT_TPS);
 	}
 	
 	public Window(int width, int height, String title, boolean resizable, boolean visible,
-				  BufferedImage icon, int tps,
-				  Render preRender, Render render, Render postRender) {
+				  BufferedImage icon, int tps) {
 		if (INIT_WINDOW == null)
 			INIT_WINDOW = this;
 		frame = new JFrame(title);

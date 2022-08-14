@@ -14,7 +14,7 @@ public class GuessRowFrame  {
 	private LetterFrame[] letters;
 	
 	public GuessRowFrame(Renderable container) {
-		renderable = new RenderableStack.Builder()
+		renderable = new RenderableStack.Builder<>()
 				.container(container)
 				.marginX(new StaticDimension(3))
 				.marginY(new StaticDimension(2))

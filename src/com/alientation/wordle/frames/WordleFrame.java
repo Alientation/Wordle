@@ -15,7 +15,7 @@ public class WordleFrame{
 	private GuessRowFrame[] rows;
 	
 	public WordleFrame(Renderable container) {
-		renderable = new RenderableStack.Builder()
+		renderable = new RenderableStack.Builder<>()
 				.container(container)
 				.spacing(new StaticDimension(5))
 				.backgroundColor(Color.WHITE)

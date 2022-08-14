@@ -25,7 +25,7 @@ public class Renderable {
 
 	protected ArrayList<RenderableComponent> subreferences;
 	protected String id;
-	public Renderable(Builder builder) {
+	public Renderable(Builder<?> builder) {
 		this.window = builder.window;
 		this.render = builder.render;
 		this.subreferences = builder.subreferences;
@@ -120,7 +120,7 @@ public class Renderable {
 	/**
 	 * Sets the window the current renderable is contained within and updates references to resolve potential conflicts
 	 * 
-	 * @param window
+	 * @param window the jFrame window this renderable is container within. It can also be the window's renderable
 	 */
 	public void setWindow(Window window) {
 		//TODO: resolve potential conflicts that arise from changing the windows
@@ -239,7 +239,13 @@ public class Renderable {
 	 */
 	public String id() { return this.id; }
 
-	public static class Builder {
+	/**
+	 * How to subclass Builder pattern classes
+	 * <a href="https://stackoverflow.com/questions/17164375/subclassing-a-java-builder-class/34741836#34741836">...</a>
+	 *
+	 * @param <T> help with subclassing builders
+	 */
+	public static class Builder<T extends Builder<T>> {
 		protected Window window;
 		protected BufferedImage render;
 		protected ArrayList<RenderableComponent> subreferences;
@@ -249,29 +255,29 @@ public class Renderable {
 			this.subreferences = new ArrayList<>();
 		}
 
-		public Builder window(Window window) {
+		public T window(Window window) {
 			this.window = window;
-			return this;
+			return (T) this;
 		}
 
-		public Builder subreference(RenderableComponent renderable) {
+		public T subreference(RenderableComponent renderable) {
 			subreferences.add(renderable);
-			return this;
+			return (T) this;
 		}
 
-		public Builder subreferences(Collection<RenderableComponent> renderables) {
+		public T subreferences(Collection<RenderableComponent> renderables) {
 			subreferences.addAll(renderables);
-			return this;
+			return (T) this;
 		}
 
-		public Builder render(BufferedImage render) {
+		public T render(BufferedImage render) {
 			this.render = render;
-			return this;
+			return (T) this;
 		}
 
-		public Builder id(String id) {
+		public T id(String id) {
 			this.id = id;
-			return this;
+			return (T) this;
 		}
 
 		public Renderable build() throws IllegalStateException {

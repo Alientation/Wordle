@@ -10,7 +10,7 @@ import com.alientation.gui.graphics.renderable.dimension.StaticDimension;
 public class KeyboardFrame {
 	private RenderableStack renderable;
 	public KeyboardFrame(Renderable container) {
-		setRenderable(new RenderableStack.Builder()
+		setRenderable(new RenderableStack.Builder<>()
 				.container(container)
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))

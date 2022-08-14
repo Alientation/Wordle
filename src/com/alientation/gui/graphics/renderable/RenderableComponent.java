@@ -54,7 +54,7 @@ public class RenderableComponent extends Renderable {
 	 */
 
 	
-	public RenderableComponent(Builder builder) {
+	public RenderableComponent(Builder<?> builder) {
 		super(builder);
 		this.container = builder.container;
 		this.marginX = builder.marginX;
@@ -310,7 +310,8 @@ public class RenderableComponent extends Renderable {
 	public Dimension getThickness() { return frame.getThickness(); }
 	public int thickness() { return frame.getThickness().val(); }
 
-	public static class Builder extends Renderable.Builder{
+
+	public static class Builder<T extends Builder<T>> extends Renderable.Builder<T> {
 		protected Renderable container;
 		protected Dimension x,y,width,height,marginX,marginY,radius,thickness;
 		protected Color backgroundColor, frameColor;
@@ -323,121 +324,95 @@ public class RenderableComponent extends Renderable {
 		public Builder() {
 			this.dimensionReferences = new HashSet<>();
 		}
-
-		public  Builder window(Window window) {
-			super.window(window);
-			return this;
-		}
-
-		public  Builder subreference(RenderableComponent renderable) {
-			super.subreference(renderable);
-			return this;
-		}
-
-		public   Builder subreferences(Collection<RenderableComponent> renderables) {
-			super.subreferences(renderables);
-			return this;
-		}
-
-		public   Builder render(BufferedImage render) {
-			super.render(render);
-			return this;
-		}
-
-		public   Builder id(String id) {
-			super.id(id);
-			return this;
-		}
-
-		public Builder dimensionReference(DimensionComponent dc) {
+		public T dimensionReference(DimensionComponent dc) {
 			this.dimensionReferences.add(dc);
-			return this;
+			return (T) this;
 		}
 
-		public Builder dimensionReferences(Collection<DimensionComponent> dimensions) {
+		public T dimensionReferences(Collection<DimensionComponent> dimensions) {
 			this.dimensionReferences.addAll(dimensions);
-			return this;
+			return (T) this;
 		}
 
-		public Builder container(Renderable container) {
+		public T container(Renderable container) {
 			this.container = container;
 			this.window = container.window;
-			return this;
+			return (T) this;
 		}
 
-		public Builder x(Dimension x) {
+		public T x(Dimension x) {
 			this.x = x;
-			return this;
+			return (T) this;
 		}
 
-		public Builder y(Dimension y) {
+		public T y(Dimension y) {
 			this.y = y;
-			return this;
+			return (T) this;
 		}
 
-		public Builder width(Dimension width) {
+		public T width(Dimension width) {
 			this.width = width;
-			return this;
+			return (T) this;
 		}
 
-		public Builder height(Dimension height) {
+		public T height(Dimension height) {
 			this.height = height;
-			return this;
+			return (T) this;
 		}
 
-		public Builder marginX(Dimension marginX) {
+		public T marginX(Dimension marginX) {
 			this.marginX = marginX;
-			return this;
+			return (T) this;
 		}
 
-		public Builder marginY(Dimension marginY) {
+		public T marginY(Dimension marginY) {
 			this.marginY = marginY;
-			return this;
+			return (T) this;
 		}
 
-		public Builder radius(Dimension radius) {
+		public T radius(Dimension radius) {
 			this.radius = radius;
-			return this;
+			return (T) this;
 		}
 
-		public Builder thickness(Dimension thickness) {
+		public T thickness(Dimension thickness) {
 			this.thickness = thickness;
-			return this;
+			return (T) this;
 		}
 
-		public Builder backgroundTransparency(float backgroundTransparency) {
+		public T backgroundTransparency(float backgroundTransparency) {
 			this.backgroundTransparency = backgroundTransparency;
-			return this;
+			return (T) this;
 		}
 
-		public Builder frameTransparency(float frameTransparency) {
+		public T frameTransparency(float frameTransparency) {
 			this.frameTransparency = frameTransparency;
-			return this;
+			return (T) this;
 		}
 
-		public Builder backgroundImage(RenderableImage backgroundImage) {
+		public T backgroundImage(RenderableImage backgroundImage) {
 			this.backgroundImage = backgroundImage;
-			return this;
+			return (T) this;
 		}
 
-		public Builder backgroundColor(Color backgroundColor) {
+		public T backgroundColor(Color backgroundColor) {
 			this.backgroundColor = backgroundColor;
-			return this;
+			return (T) this;
 		}
 
-		public Builder frameColor(Color frameColor) {
+		public T frameColor(Color frameColor) {
 			this.frameColor = frameColor;
-			return this;
+			return (T) this;
 		}
 
-		public Builder visible(boolean visible) {
+		public T visible(boolean visible) {
 			this.visible = visible;
-			return this;
+			return (T) this;
 		}
 
-		public Builder zIndex(int zIndex) {
+		public T zIndex(int zIndex) {
 			this.zIndex = zIndex;
-			return this;
+			return (T) this;
 		}
 
 		public RenderableComponent build() throws IllegalStateException {
