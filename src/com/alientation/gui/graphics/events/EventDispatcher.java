@@ -71,9 +71,9 @@ public class EventDispatcher {
         methodEventListenerMap.clear();
         for (EventListener eventListener : eventListenerList) {
             for (Method method : eventListener.getClass().getMethods()) {
-                if (method.isAnnotationPresent(com.alientation.gui.annotations.EventListener.class) ||
-                method.getParameterCount() != 1 ||
-                Event.class.isAssignableFrom(method.getParameterTypes()[0]))
+                if (!method.isAnnotationPresent(com.alientation.gui.annotations.EventListener.class) ||
+                        method.getParameterCount() != 1 ||
+                        !Event.class.isAssignableFrom(method.getParameterTypes()[0]))
                     continue;
                 if (!eventListenersMap.containsKey(method.getParameterTypes()[0]))
                     eventListenersMap.put(method.getParameterTypes()[0],new ArrayList<>());
@@ -84,9 +84,9 @@ public class EventDispatcher {
 
         for (EventHandler eventHandler : eventHandlerList) {
             for (Method method : eventHandler.getClass().getMethods()) {
-                if (method.isAnnotationPresent(com.alientation.gui.annotations.EventHandler.class) ||
+                if (!method.isAnnotationPresent(com.alientation.gui.annotations.EventHandler.class) ||
                         method.getParameterCount() != 1 ||
-                        Event.class.isAssignableFrom(method.getParameterTypes()[0]))
+                        !Event.class.isAssignableFrom(method.getParameterTypes()[0]))
                     continue;
                 if (!eventHandlersMap.containsKey(method.getParameterTypes()[0]))
                     eventHandlersMap.put(method.getParameterTypes()[0],new ArrayList<>());
@@ -98,23 +98,29 @@ public class EventDispatcher {
 
     public void dispatch(Event event) {
         //dispatch to registered event listeners
-        for (Method method : eventListenersMap.get(event.getClass())) {
-            if (methodEventListenerMap.containsKey(method)) {
-                try {
-                    method.invoke(methodEventListenerMap.get(method),event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
+        if (eventListenersMap.containsKey(event.getClass())) {
+            for (Method method : eventListenersMap.get(event.getClass())) {
+                if (methodEventListenerMap.containsKey(method)) {
+                    try {
+                        method.setAccessible(true);
+                        method.invoke(methodEventListenerMap.get(method), event);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }
 
         //dispatch to registered event handlers
-        for (Method method : eventHandlersMap.get(event.getClass())) {
-            if (methodEventHandlerMap.containsKey(method)) {
-                try {
-                    method.invoke(methodEventHandlerMap.get(method),event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
+        if (eventHandlersMap.containsKey(event.getClass())) {
+            for (Method method : eventHandlersMap.get(event.getClass())) {
+                if (methodEventHandlerMap.containsKey(method)) {
+                    try {
+                        method.setAccessible(true);
+                        method.invoke(methodEventHandlerMap.get(method), event);
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }

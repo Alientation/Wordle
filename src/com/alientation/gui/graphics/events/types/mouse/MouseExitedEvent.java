@@ -2,11 +2,12 @@ package com.alientation.gui.graphics.events.types.mouse;
 
 
 import com.alientation.gui.graphics.Window;
+import com.alientation.gui.graphics.renderable.Renderable;
 
 import java.awt.event.MouseEvent;
 
 public class MouseExitedEvent extends MouseButtonEvent {
-    public MouseExitedEvent(Window window, MouseEvent mouseEvent) {
-        super(Type.MOUSE_EXITED, window, mouseEvent);
+    public MouseExitedEvent(Renderable renderable, MouseEvent mouseEvent) {
+        super(Type.MOUSE_EXITED, renderable, mouseEvent);
     }
 }

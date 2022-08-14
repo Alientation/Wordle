@@ -1,6 +1,8 @@
 package com.alientation.wordle;
 
 import com.alientation.gui.graphics.Window;
+import com.alientation.gui.graphics.events.EventListener;
+import com.alientation.gui.graphics.events.types.mouse.MouseClickedEvent;
 import com.alientation.gui.graphics.font.PixelFont;
 import com.alientation.wordle.frames.MainFrame;
 import com.alientation.wordle.words.WordList;
@@ -31,6 +33,13 @@ public class Game extends Window {
 		new WordList(VALID_WORDS_FILENAME,VALID_WORDS_FILENAME);
 		new WordList(WORDLE_WORDS_FILENAME,WORDLE_WORDS_FILENAME);
 		newRound(VALID_WORDS_FILENAME, WORDLE_WORDS_FILENAME, NUMBER_GUESSES, WORD_LENGTH);
+
+		registerEventListener(new EventListener() {
+			@com.alientation.gui.annotations.EventListener
+			public void click(MouseClickedEvent event) {
+				System.out.println("time: " +(event.getInitTime() - System.currentTimeMillis()) + " -> clicked!");
+			}
+		});
 
 		this.start();
 		resize();

@@ -1,6 +1,6 @@
 package com.alientation.gui.graphics.events;
 
-import com.alientation.gui.graphics.Window;
+import com.alientation.gui.graphics.renderable.Renderable;
 
 public abstract class Event {
 
@@ -15,33 +15,22 @@ public abstract class Event {
         MOUSE_SCROLLED,
         KEY_PRESSED,
         KEY_RELEASED,
-        KEY_TYPED;
+        KEY_TYPED
     }
-    private Type type;
-    private Window window;
+    private final Type type;
+    private final Renderable renderable;
     boolean cancelled, handled;
-    protected Event(Type type, Window window) {
+    private final long initTime;
+    protected Event(Type type, Renderable renderable) {
         this.type = type;
-        this.window = window;
+        this.renderable = renderable;
+        this.initTime = System.currentTimeMillis();
     }
 
-    public Type getType() {
-        return type;
-    }
-
-    public Window getWindow() {
-        return window;
-    }
-
-    public boolean isCancelled() {
-        return cancelled;
-    }
-
-    public void cancel() {
-        this.cancelled = true;
-    }
-
-    public boolean isHandled() {
-        return handled;
-    }
+    public Type getType() { return type; }
+    public Renderable getRenderable() { return renderable; }
+    public boolean isCancelled() { return cancelled; }
+    public void cancel() { this.cancelled = true; }
+    public boolean isHandled() { return handled; }
+    public long getInitTime() { return initTime; }
 }

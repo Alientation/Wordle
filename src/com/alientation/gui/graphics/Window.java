@@ -87,42 +87,42 @@ public class Window extends Canvas implements Runnable {
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				MousePressedEvent event = new MousePressedEvent(renderable.getWindow(), e);
+				MousePressedEvent event = new MousePressedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				MouseReleasedEvent event = new MouseReleasedEvent(renderable.getWindow(), e);
+				MouseReleasedEvent event = new MouseReleasedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void mouseMoved(MouseEvent e) {
-				MouseMovedEvent event = new MouseMovedEvent(renderable.getWindow(), e);
+				MouseMovedEvent event = new MouseMovedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void mouseWheelMoved(MouseWheelEvent e) {
-				MouseScrolledEvent event = new MouseScrolledEvent(renderable.getWindow(), e);
+				MouseScrolledEvent event = new MouseScrolledEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				MouseClickedEvent event = new MouseClickedEvent(renderable.getWindow(), e);
+				MouseClickedEvent event = new MouseClickedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void mouseDragged(MouseEvent e) {
-				MouseDraggedEvent event = new MouseDraggedEvent(renderable.getWindow(), e);
+				MouseDraggedEvent event = new MouseDraggedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void mouseEntered(MouseEvent e) {
-				MouseEnteredEvent event = new MouseEnteredEvent(renderable.getWindow(), e);
+				MouseEnteredEvent event = new MouseEnteredEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {
-				MouseExitedEvent event = new MouseExitedEvent(renderable.getWindow(), e);
+				MouseExitedEvent event = new MouseExitedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 		});
@@ -130,17 +130,17 @@ public class Window extends Canvas implements Runnable {
 		this.addKeyListener(new KeyAdapter() {
 			@Override
 			public void keyTyped(KeyEvent e) {
-				KeyTypedEvent event = new KeyTypedEvent(renderable.getWindow(), e);
+				KeyTypedEvent event = new KeyTypedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void keyPressed(KeyEvent e) {
-				KeyPressedEvent event = new KeyPressedEvent(renderable.getWindow(), e);
+				KeyPressedEvent event = new KeyPressedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 			@Override
 			public void keyReleased(KeyEvent e) {
-				KeyReleasedEvent event = new KeyReleasedEvent(renderable.getWindow(), e);
+				KeyReleasedEvent event = new KeyReleasedEvent(renderable, e);
 				eventDispatcher.dispatch(event);
 			}
 		});
