@@ -20,6 +20,9 @@ public class Window extends Canvas implements Runnable {
 	private static final long serialVersionUID = 1L;
 	public static final int INIT_WIDTH = 800, INIT_HEIGHT = 1000, INIT_TPS = 60;
 	public static final String INIT_TITLE = "WORDLE";
+	public static final String RESOURCE = "res\\";
+	public static final String IMAGES = RESOURCE + "images\\";
+	public static final String FONTS = RESOURCE + "fonts\\";
 	public static Window INIT_WINDOW;
 	
 	protected BufferedImage image;

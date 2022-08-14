@@ -5,11 +5,15 @@ import com.alientation.gui.graphics.font.PixelFont;
 import com.alientation.wordle.frames.MainFrame;
 import com.alientation.wordle.words.WordList;
 
+import java.io.Serial;
+
 
 public class Game extends Window {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	public static final int NUMBER_GUESSES = 6, WORD_LENGTH = 5;
-	public static final String VALID_WORDS_FILENAME = "allowed-guesses-normal.txt", WORDLE_WORDS_FILENAME = "wordle-words-normal.txt";
+	public static final String VALID_WORDS_FILENAME = RESOURCE + "allowed-guesses-normal.txt";
+	public static final String WORDLE_WORDS_FILENAME = RESOURCE + "wordle-words-normal.txt";
 	public static Game game;
 	
 	
