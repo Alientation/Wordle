@@ -6,14 +6,29 @@
 
 (/) Events, Registering Event Handlers, and Passing Events To Handlers
 (/) Add Key/Mouse input events
-
-
-(-) Background
+(/) Background
     -   Background Image
 (/) RenderableImage
+
+(-) Z-Indexing
+    -   Allow users to customize the z index of each renderable, while also on adjusting as needed in runtime
+        -   boolean dynamicZIndexing?
+    -   Every renderable's render method will be passed a WindowRender object that it will request a specified dimensioned graphics render
+        then draw on it and return it
+            -   the specified dimensioned graphics render will store the real x and y of itself compared to the window and the z index
+(-) Custom Window Renderer Class
+    -   Compiles all sub renderables graphics render and their associated z index
+    -   sorts it to then render from bottom to top
 (-) Frame
     -   Rounded edges
     -   thickness, color, transparency
     -   make sure whenever the frame itself is updated, tell the container renderableComponent to update to
+(-) More Events
+    -   Events for everything! (YES LITERALLY EVERYTHING NEEDS EVENTS)
+(-) User input events need to be handled in a special way
+    -   The window each renderable is in handles the user input events by determining which renderable should handle it
+        The window will always handle events (call eventDispatcher) whereas renderables only handle events if the user is actively on it
+            1) mouse inputs, check x and y to see which renderable the user clicks on, make sure to keep track of the z indexing
+
 (-) Button
 (-) Fonts
