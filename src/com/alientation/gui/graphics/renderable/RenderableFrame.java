@@ -1,8 +1,6 @@
 package com.alientation.gui.graphics.renderable;
 
 import com.alientation.gui.graphics.renderable.dimension.Dimension;
-import com.alientation.gui.graphics.renderable.dimension.RelativeDimension;
-import com.alientation.gui.graphics.renderable.dimension.StaticDimension;
 
 import java.awt.*;
 
