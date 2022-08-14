@@ -11,7 +11,7 @@ public class DataFrame {
 	public DataFrame(Renderable container) {
 		setRenderable(new RenderableComponent.Builder()
 				.container(container)
-				.color(Color.DARK_GRAY)
+				.backgroundColor(Color.DARK_GRAY)
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))
 				.build());

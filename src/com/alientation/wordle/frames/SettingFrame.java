@@ -10,7 +10,7 @@ public class SettingFrame{
 	public SettingFrame(Renderable container) {
 		setRenderable(new RenderableComponent.Builder()
 				.container(container)
-				.color(Color.LIGHT_GRAY)
+				.backgroundColor(Color.LIGHT_GRAY)
 				.build());
 	}
 

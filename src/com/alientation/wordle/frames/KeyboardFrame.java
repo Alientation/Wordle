@@ -15,7 +15,7 @@ public class KeyboardFrame {
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))
 				.spacing(new StaticDimension(5))
-				.color(Color.MAGENTA)
+				.backgroundColor(Color.MAGENTA)
 				.sizing(Sizing.VERTICAL_EQUAL)
 				.build());
 	}

@@ -18,7 +18,7 @@ public class WordleFrame{
 		renderable = new RenderableStack.Builder()
 				.container(container)
 				.spacing(new StaticDimension(5))
-				.color(Color.WHITE)
+				.backgroundColor(Color.WHITE)
 				.sizing(Sizing.VERTICAL_EQUAL)
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))

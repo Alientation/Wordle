@@ -19,7 +19,7 @@ public class GuessRowFrame  {
 				.marginX(new StaticDimension(3))
 				.marginY(new StaticDimension(2))
 				.spacing(new StaticDimension(5))
-				.color(Color.WHITE)
+				.backgroundColor(Color.WHITE)
 				.sizing(Sizing.HORIZONTAL_EQUAL)
 				.build();
 		

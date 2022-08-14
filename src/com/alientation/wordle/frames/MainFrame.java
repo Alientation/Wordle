@@ -30,7 +30,7 @@ public class MainFrame {
 				.marginX(new StaticDimension(10))
 				.marginY(new StaticDimension(10))
 				.spacing(new StaticDimension(10))
-				.color(Color.GREEN)
+				.backgroundColor(Color.GREEN)
 				.sizing(Sizing.HORIZONTAL_EQUAL)
 				.id("MAIN-FRAME")
 				.build();
@@ -40,7 +40,7 @@ public class MainFrame {
 		wordleKeyboardStack = new RenderableStack.Builder()
 				.container(renderable)
 				.spacing(new StaticDimension(5))
-				.color(Color.PINK)
+				.backgroundColor(Color.PINK)
 				.sizing(Sizing.VERTICAL_EQUAL)
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))

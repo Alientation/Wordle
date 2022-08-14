@@ -13,7 +13,7 @@ public class LetterFrame {
 				.container(container)
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))
-				.color(Color.GRAY)
+				.backgroundColor(Color.GRAY)
 				.build());
 	}
 

@@ -47,167 +47,7 @@ public class RenderableComponent extends Renderable {
 	/**
 	 * TODO: fix builder class in other renderable classes
 	 */
-	public static class Builder extends Renderable.Builder{
-		private Renderable container;
-		private Dimension x,y,width,height,marginX,marginY,radius,thickness;
-		private Color backgroundColor, frameColor;
-		private boolean visible;
-		private float backgroundTransparency, frameTransparency;
-		private RenderableImage backgroundImage;
-		private Set<DimensionComponent> dimensionReferences;
-		private int zIndex;
-		
-		public Builder() {
-			this.dimensionReferences = new HashSet<>();
-		}
-		
-		public Builder window(Window window) {
-			super.window(window);
-			return this;
-		}
-		
-		public Builder subreference(RenderableComponent renderable) {
-			super.subreference(renderable);
-			return this;
-		}
-		
-		public Builder subreferences(Collection<RenderableComponent> renderables) {
-			super.subreferences(renderables);
-			return this;
-		}
-		
-		public Builder dimensionReference(DimensionComponent dc) {
-			this.dimensionReferences.add(dc);
-			return this;
-		}
-		
-		public Builder dimensionReferences(Collection<DimensionComponent> dimensions) {
-			this.dimensionReferences.addAll(dimensions);
-			return this;
-		}
-		
-		public Builder render(BufferedImage render) {
-			super.render(render);
-			return this;
-		}
-		
-		public Builder id(String id) {
-			super.id(id);
-			return this;
-		}
-		
-		public Builder container(Renderable container) {
-			this.container = container;
-			this.window = container.window;
-			return this;
-		}
-		
-		public Builder x(Dimension x) {
-			this.x = x;
-			return this;
-		}
-		
-		public Builder y(Dimension y) {
-			this.y = y;
-			return this;
-		}
-		
-		public Builder width(Dimension width) {
-			this.width = width;
-			return this;
-		}
-		
-		public Builder height(Dimension height) {
-			this.height = height;
-			return this;
-		}
-		
-		public Builder marginX(Dimension marginX) {
-			this.marginX = marginX;
-			return this;
-		}
-		
-		public Builder marginY(Dimension marginY) {
-			this.marginY = marginY;
-			return this;
-		}
 
-		public Builder radius(Dimension radius) {
-			this.radius = radius;
-			return this;
-		}
-
-		public Builder thickness(Dimension thickness) {
-			this.thickness = thickness;
-			return this;
-		}
-
-		public Builder backgroundTransparency(float backgroundTransparency) {
-			this.backgroundTransparency = backgroundTransparency;
-			return this;
-		}
-
-		public Builder frameTransparency(float frameTransparency) {
-			this.frameTransparency = frameTransparency;
-			return this;
-		}
-
-		public Builder backgroundImage(RenderableImage backgroundImage) {
-			this.backgroundImage = backgroundImage;
-			return this;
-		}
-		
-		public Builder color(Color color) {
-			this.backgroundColor = color;
-			return this;
-		}
-
-		public Builder frameColor(Color frameColor) {
-			this.frameColor = frameColor;
-			return this;
-		}
-		
-		public Builder visible(boolean visible) {
-			this.visible = visible;
-			return this;
-		}
-
-		public Builder zIndex(int zIndex) {
-			this.zIndex = zIndex;
-			return this;
-		}
-		
-		public RenderableComponent build() throws IllegalStateException {
-			validate();
-			return new RenderableComponent(this);
-		}
-		
-		public void validate() throws IllegalStateException {
-			super.validate();
-			if (container == null)
-				container = BASE;
-			if (x == null)
-				x = StaticDimension.MIN;
-			if (y == null)
-				y = StaticDimension.MIN;
-			if (width == null)
-				width = new RelativeDimension(new DimensionWidth(container),1f);
-			if (height == null)
-				height = new RelativeDimension(new DimensionHeight(container),1f);
-			if (marginX == null)
-				marginX = StaticDimension.MIN;
-			if (marginY == null)
-				marginY = StaticDimension.MIN;
-			if (radius == null)
-				radius = StaticDimension.MIN;
-			if (thickness == null)
-				thickness = StaticDimension.MIN;
-			if (backgroundColor == null)
-				backgroundColor = Color.WHITE;
-			if (frameColor == null)
-				frameColor = Color.LIGHT_GRAY;
-		}
-	}
 	
 	public RenderableComponent(Builder builder) {
 		super(builder);
@@ -232,7 +72,7 @@ public class RenderableComponent extends Renderable {
 				.height(new RelativeDimension(new DimensionSafeHeight(Window.INIT_WINDOW.getRenderable()),1.0f))
 				.marginX(new StaticDimension(0))
 				.marginY(new StaticDimension(0))
-				.color(Color.WHITE)
+				.backgroundColor(Color.WHITE)
 		);
 	}
 	
@@ -556,5 +396,168 @@ public class RenderableComponent extends Renderable {
 
 	public int thickness() {
 		return frame.getThickness().val();
+	}
+
+
+	public static class Builder extends Renderable.Builder{
+		protected Renderable container;
+		protected Dimension x,y,width,height,marginX,marginY,radius,thickness;
+		protected Color backgroundColor, frameColor;
+		protected boolean visible;
+		protected float backgroundTransparency, frameTransparency;
+		protected RenderableImage backgroundImage;
+		protected Set<DimensionComponent> dimensionReferences;
+		protected int zIndex;
+
+		public Builder() {
+			this.dimensionReferences = new HashSet<>();
+		}
+
+		public  Builder window(Window window) {
+			super.window(window);
+			return this;
+		}
+
+		public  Builder subreference(RenderableComponent renderable) {
+			super.subreference(renderable);
+			return this;
+		}
+
+		public   Builder subreferences(Collection<RenderableComponent> renderables) {
+			super.subreferences(renderables);
+			return this;
+		}
+
+		public   Builder render(BufferedImage render) {
+			super.render(render);
+			return this;
+		}
+
+		public   Builder id(String id) {
+			super.id(id);
+			return this;
+		}
+
+		public Builder dimensionReference(DimensionComponent dc) {
+			this.dimensionReferences.add(dc);
+			return this;
+		}
+
+		public Builder dimensionReferences(Collection<DimensionComponent> dimensions) {
+			this.dimensionReferences.addAll(dimensions);
+			return this;
+		}
+
+		public Builder container(Renderable container) {
+			this.container = container;
+			this.window = container.window;
+			return this;
+		}
+
+		public Builder x(Dimension x) {
+			this.x = x;
+			return this;
+		}
+
+		public Builder y(Dimension y) {
+			this.y = y;
+			return this;
+		}
+
+		public Builder width(Dimension width) {
+			this.width = width;
+			return this;
+		}
+
+		public Builder height(Dimension height) {
+			this.height = height;
+			return this;
+		}
+
+		public Builder marginX(Dimension marginX) {
+			this.marginX = marginX;
+			return this;
+		}
+
+		public Builder marginY(Dimension marginY) {
+			this.marginY = marginY;
+			return this;
+		}
+
+		public Builder radius(Dimension radius) {
+			this.radius = radius;
+			return this;
+		}
+
+		public Builder thickness(Dimension thickness) {
+			this.thickness = thickness;
+			return this;
+		}
+
+		public Builder backgroundTransparency(float backgroundTransparency) {
+			this.backgroundTransparency = backgroundTransparency;
+			return this;
+		}
+
+		public Builder frameTransparency(float frameTransparency) {
+			this.frameTransparency = frameTransparency;
+			return this;
+		}
+
+		public Builder backgroundImage(RenderableImage backgroundImage) {
+			this.backgroundImage = backgroundImage;
+			return this;
+		}
+
+		public Builder backgroundColor(Color backgroundColor) {
+			this.backgroundColor = backgroundColor;
+			return this;
+		}
+
+		public Builder frameColor(Color frameColor) {
+			this.frameColor = frameColor;
+			return this;
+		}
+
+		public Builder visible(boolean visible) {
+			this.visible = visible;
+			return this;
+		}
+
+		public Builder zIndex(int zIndex) {
+			this.zIndex = zIndex;
+			return this;
+		}
+
+		public RenderableComponent build() throws IllegalStateException {
+			validate();
+			return new RenderableComponent(this);
+		}
+
+		public void validate() throws IllegalStateException {
+			super.validate();
+			if (container == null)
+				container = BASE;
+			if (x == null)
+				x = StaticDimension.MIN;
+			if (y == null)
+				y = StaticDimension.MIN;
+			if (width == null)
+				width = new RelativeDimension(new DimensionWidth(container),1f);
+			if (height == null)
+				height = new RelativeDimension(new DimensionHeight(container),1f);
+			if (marginX == null)
+				marginX = StaticDimension.MIN;
+			if (marginY == null)
+				marginY = StaticDimension.MIN;
+			if (radius == null)
+				radius = StaticDimension.MIN;
+			if (thickness == null)
+				thickness = StaticDimension.MIN;
+			if (backgroundColor == null)
+				backgroundColor = Color.WHITE;
+			if (frameColor == null)
+				frameColor = Color.LIGHT_GRAY;
+		}
 	}
 }

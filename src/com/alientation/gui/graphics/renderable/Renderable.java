@@ -26,52 +26,6 @@ public class Renderable {
 	protected ArrayList<RenderableComponent> subreferences;
 	protected String id;
 	
-	public static class Builder {
-		protected Window window;
-		private BufferedImage render;
-		private ArrayList<RenderableComponent> subreferences;
-		private String id;
-		
-		public Builder() {
-			this.subreferences = new ArrayList<>();
-		}
-		
-		public Builder window(Window window) {
-			this.window = window;
-			return this;
-		}
-		
-		public Builder subreference(RenderableComponent renderable) {
-			subreferences.add(renderable);
-			return this;
-		}
-		
-		public Builder subreferences(Collection<RenderableComponent> renderable) {
-			subreferences.addAll(renderable);
-			return this;
-		}
-		
-		public Builder render(BufferedImage render) {
-			this.render = render;
-			return this;
-		}
-		
-		public Builder id(String id) {
-			this.id = id;
-			return this;
-		}
-		
-		public Renderable build() throws IllegalStateException {
-			validate();
-			return new Renderable(this);
-		}
-		
-		public void validate() throws IllegalStateException {
-			if (id == null)
-				id = "unidentified";
-		}
-	}
-	
 	public Renderable(Builder builder) {
 		this.window = builder.window;
 		this.render = builder.render;
@@ -346,5 +300,52 @@ public class Renderable {
 	 */
 	public String id() {
 		return this.id;
+	}
+
+
+	public static class Builder {
+		protected Window window;
+		protected BufferedImage render;
+		protected ArrayList<RenderableComponent> subreferences;
+		protected String id;
+
+		public Builder() {
+			this.subreferences = new ArrayList<>();
+		}
+
+		public Builder window(Window window) {
+			this.window = window;
+			return this;
+		}
+
+		public Builder subreference(RenderableComponent renderable) {
+			subreferences.add(renderable);
+			return this;
+		}
+
+		public Builder subreferences(Collection<RenderableComponent> renderables) {
+			subreferences.addAll(renderables);
+			return this;
+		}
+
+		public Builder render(BufferedImage render) {
+			this.render = render;
+			return this;
+		}
+
+		public Builder id(String id) {
+			this.id = id;
+			return this;
+		}
+
+		public Renderable build() throws IllegalStateException {
+			validate();
+			return new Renderable(this);
+		}
+
+		public void validate() throws IllegalStateException {
+			if (id == null)
+				id = "unidentified";
+		}
 	}
 }
