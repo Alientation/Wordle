@@ -1,0 +1,61 @@
+<component name="libraryTable">
+  <library name="java">
+    <CLASSES />
+    <JAVADOC />
+    <SOURCES>
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/common/common-image/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/common/common-image/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/common/common-io/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/common/common-io/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/common/common-lang/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/common/common-lang/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/contrib/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/contrib/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-batik/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-batik/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-bmp/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-bmp/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-clippath/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-clippath/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-core/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-core/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-hdr/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-hdr/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-icns/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-icns/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-iff/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-iff/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-jpeg-jai-interop/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-jpeg-jep262-interop/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-jpeg/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-jpeg/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-metadata/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-metadata/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-pcx/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-pcx/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-pict/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-pict/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-pnm/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-pnm/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-psd/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-psd/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-reference/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-sgi/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-sgi/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-tga/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-tga/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-thumbsdb/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-thumbsdb/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-tiff-jai-interop/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-tiff-jdk-interop/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-tiff/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-tiff/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-webp/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-webp/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-xwd/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/imageio/imageio-xwd/src/test/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/servlet/src/main/java" />
+      <root url="file://$USER_HOME$/Downloads/TwelveMonkeys/TwelveMonkeys-twelvemonkeys-3.8.2/servlet/src/test/java" />
+    </SOURCES>
+  </library>
+</component>

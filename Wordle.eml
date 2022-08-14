@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component jdk="JavaSE-14" jdk_type="JavaSDK">
+	<contentEntry url="file://$MODULE_DIR$"/>
+	<levels>
+		<level name="java" value="project"/>
+	</levels>
+</component>

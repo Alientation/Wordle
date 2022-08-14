@@ -1,13 +1,14 @@
 package com.alientation.gui.graphics.renderable;
 
 import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.renderable.collections.stack.RenderableStackElement;
 import com.alientation.gui.graphics.renderable.dimension.Dimension;
 import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
+import com.twelvemonkeys.image.ResampleOp;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.awt.image.BufferedImageOp;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
@@ -38,8 +39,20 @@ public class RenderableImage extends RenderableComponent {
         updateImage();
     }
 
-    public void updateImage() {
+    @Override
+    public void resized() {
+        super.resized();
+        updateImage();
+    }
 
+    /**
+     * Perform Lanczos Resizing
+     * https://stackoverflow.com/questions/24745147/java-resize-image-without-losing-quality
+     *
+     */
+    public void updateImage() {
+        BufferedImageOp resampler = new ResampleOp(safeWidth(), safeHeight(), ResampleOp.FILTER_LANCZOS);
+        bufferedImage = resampler.filter(originalImage,null);
     }
 
     public String getImagePath() {
