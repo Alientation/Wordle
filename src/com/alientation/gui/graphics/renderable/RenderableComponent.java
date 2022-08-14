@@ -186,8 +186,13 @@ public class RenderableComponent extends Renderable {
 	public float getFrameTransparency() { return frame.getTransparency(); }
 	public RenderableBackground getBackground() { return background; }
 	public RenderableFrame getFrame() { return frame; }
+
+	//for optimizations, only draw if it requires an update
 	public void reqUpdate() { this.reqUpdate = true; }
 
+
+	//'x' is the true x relative to the window container
+	//'relX' is the relative x to the renderable container (Think this isn't actually working) TODO fix this
 	public RenderableComponent setX(Dimension x) {
 		if (frame.getX() instanceof RelativeDimension)
 			this.dimensionReferences.remove(((RelativeDimension) frame.getX()).getRelTo());
