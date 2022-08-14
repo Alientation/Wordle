@@ -14,6 +14,8 @@ import java.io.Serial;
 import javax.swing.JFrame;
 
 import com.alientation.gui.graphics.events.EventDispatcher;
+import com.alientation.gui.graphics.events.EventHandler;
+import com.alientation.gui.graphics.events.EventListener;
 import com.alientation.gui.graphics.events.types.key.KeyPressedEvent;
 import com.alientation.gui.graphics.events.types.key.KeyReleasedEvent;
 import com.alientation.gui.graphics.events.types.key.KeyTypedEvent;
@@ -166,8 +168,6 @@ public class Window extends Canvas implements Runnable {
 	
 	public void render() {
 		preRender();
-		if (render != null)
-			render.render(g);
 		postRender();
 	}
 	
@@ -178,17 +178,11 @@ public class Window extends Canvas implements Runnable {
 			return;
 		}
 		g = bs.getDrawGraphics();
-
-		if (render != null)
-			preRender.render(g);
-		else {
-			g.setColor(Color.black);
-			g.fillRect(0, 0, this.getWidth(), this.getHeight());
-		}
+		g.setColor(Color.black);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());
 	}
 	
 	public void postRender() {
-		postRender.render(g);
 		g.dispose();
 		bs.show();
 	}
@@ -241,7 +235,10 @@ public class Window extends Canvas implements Runnable {
 			}
 		}
 		stop();
-	}	
+	}
+
+	public void registerEventListener(EventListener eventListener) { this.eventDispatcher.registerEventListener(eventListener); }
+	public void registerEventHandler(EventHandler eventHandler) { this.eventDispatcher.registerEventHandler(eventHandler); }
 	public Graphics getGraphics() { return this.g; }
 	public Renderable getRenderable() { return this.renderable; }
 	public void setRenderable(Renderable renderable) { this.renderable = renderable; }

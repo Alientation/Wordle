@@ -5,7 +5,9 @@ import com.alientation.gui.graphics.renderable.Renderable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Dispatches events first to listeners then to handlers that handle said event
@@ -20,66 +22,105 @@ public class EventDispatcher {
     /**
      * List of event listeners that is used to access events before it is handled
      */
-    private List<EventListener> eventListenerList;
+    private final List<EventListener> eventListenerList;
 
     /**
      * List of event handlers that is used to handle the events with appropriate responses
      */
-    private List<EventHandler> eventHandlerList;
+    private final List<EventHandler> eventHandlerList;
+
+    private final Map<Class,List<Method>> eventListenersMap;
+    private final Map<Class,List<Method>> eventHandlersMap;
+    private final Map<Method,EventListener> methodEventListenerMap;
+    private final Map<Method,EventHandler> methodEventHandlerMap;
     public EventDispatcher(Renderable renderable) {
         this.renderable = renderable;
         this.eventListenerList = new ArrayList<>();
         this.eventHandlerList = new ArrayList<>();
+        this.eventListenersMap = new HashMap<>();
+        this.eventHandlersMap = new HashMap<>();
+        this.methodEventListenerMap = new HashMap<>();
+        this.methodEventHandlerMap = new HashMap<>();
     }
 
     public void registerEventListener(EventListener listener) {
         if (eventListenerList.contains(listener)) return;
         this.eventListenerList.add(listener);
+        update();
+    }
+
+    public void unregisterEventListener(EventListener listener) {
+        this.eventListenerList.remove(listener);
+        update();
     }
 
     public void registerEventHandler(EventHandler handler) {
         if (eventHandlerList.contains(handler)) return;
         this.eventHandlerList.add(handler);
+        update();
+    }
+    public void unregisterEventHandler(EventHandler handler) {
+        this.eventHandlerList.remove(handler);
+        update();
     }
 
-    public void dispatch(Event event) {
-        //dispatch to registered event handlers
+    public void update() {
+        eventListenersMap.clear();
+        eventHandlersMap.clear();
+        methodEventHandlerMap.clear();
+        methodEventListenerMap.clear();
         for (EventListener eventListener : eventListenerList) {
-            if (event.cancelled) return;
-
             for (Method method : eventListener.getClass().getMethods()) {
-                if (!method.isAnnotationPresent(com.alientation.gui.annotations.EventListener.class) ||
-                        method.getParameterCount() != 1 ||
-                        method.getParameterTypes()[0] != event.getClass()
-                ) continue;
-
-                method.setAccessible(true);
-
-                try {
-                    method.invoke(eventListener,event);
-                } catch (IllegalAccessException | InvocationTargetException e) {
-                    throw new RuntimeException(e);
-                }
+                if (method.isAnnotationPresent(com.alientation.gui.annotations.EventListener.class) ||
+                method.getParameterCount() != 1 ||
+                Event.class.isAssignableFrom(method.getParameterTypes()[0]))
+                    continue;
+                if (!eventListenersMap.containsKey(method.getParameterTypes()[0]))
+                    eventListenersMap.put(method.getParameterTypes()[0],new ArrayList<>());
+                eventListenersMap.get(method.getParameterTypes()[0]).add(method);
+                methodEventListenerMap.put(method,eventListener);
             }
         }
 
         for (EventHandler eventHandler : eventHandlerList) {
-            if (event.handled || event.cancelled) return;
-
             for (Method method : eventHandler.getClass().getMethods()) {
-                if (!method.isAnnotationPresent(com.alientation.gui.annotations.EventHandler.class) ||
+                if (method.isAnnotationPresent(com.alientation.gui.annotations.EventHandler.class) ||
                         method.getParameterCount() != 1 ||
-                        method.getParameterTypes()[0] != event.getClass()
-                ) continue;
+                        Event.class.isAssignableFrom(method.getParameterTypes()[0]))
+                    continue;
+                if (!eventHandlersMap.containsKey(method.getParameterTypes()[0]))
+                    eventHandlersMap.put(method.getParameterTypes()[0],new ArrayList<>());
+                eventHandlersMap.get(method.getParameterTypes()[0]).add(method);
+                methodEventHandlerMap.put(method,eventHandler);
+            }
+        }
+    }
 
-                method.setAccessible(true);
-
+    public void dispatch(Event event) {
+        //dispatch to registered event listeners
+        for (Method method : eventListenersMap.get(event.getClass())) {
+            if (methodEventListenerMap.containsKey(method)) {
                 try {
-                    event.handled = (Boolean) method.invoke(eventHandler, event);
+                    method.invoke(methodEventListenerMap.get(method),event);
+                } catch (IllegalAccessException | InvocationTargetException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        //dispatch to registered event handlers
+        for (Method method : eventHandlersMap.get(event.getClass())) {
+            if (methodEventHandlerMap.containsKey(method)) {
+                try {
+                    method.invoke(methodEventHandlerMap.get(method),event);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     throw new RuntimeException(e);
                 }
             }
         }
     }
+
+    public Renderable getRenderable() { return renderable; }
+    public List<EventListener> getEventListenerList() { return eventListenerList; }
+    public List<EventHandler> getEventHandlerList() { return eventHandlerList; }
 }

@@ -9,6 +9,7 @@ public class MouseButtonEvent extends Event {
     protected MouseEvent mouseEvent;
     protected MouseButtonEvent(Type type, Window window, MouseEvent mouseEvent) {
         super(type, window);
+        this.mouseEvent = mouseEvent;
     }
 
     public MouseEvent getMouseEvent() {

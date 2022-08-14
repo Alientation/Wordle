@@ -10,6 +10,8 @@ import java.util.Set;
 
 import com.alientation.gui.graphics.Window;
 import com.alientation.gui.graphics.events.EventDispatcher;
+import com.alientation.gui.graphics.events.EventHandler;
+import com.alientation.gui.graphics.events.EventListener;
 import com.alientation.gui.graphics.renderable.dimension.*;
 import com.alientation.gui.graphics.renderable.dimension.component.*;
 
@@ -100,7 +102,7 @@ public class RenderableComponent extends Renderable {
 	}
 
 	public void render(Graphics g) {
-		//if (this.visible)
+		//if (this.visible) //optimization
 			//g.drawImage(render(),x(), y(), null);
 
 
@@ -127,6 +129,9 @@ public class RenderableComponent extends Renderable {
 
 	public void addDimensionReference(DimensionComponent d) { this.dimensionReferences.add(d); }
 	public void removeDimensionReference(DimensionComponent d) { this.dimensionReferences.remove(d); }
+
+	public void registerEventListener(EventListener eventListener) { this.eventDispatcher.registerEventListener(eventListener); }
+	public void registerEventHandler(EventHandler eventHandler) { this.eventDispatcher.registerEventHandler(eventHandler); }
 	
 	@Override
 	public String toString() {

@@ -31,7 +31,7 @@ public class Game extends Window {
 		new WordList(VALID_WORDS_FILENAME,VALID_WORDS_FILENAME);
 		new WordList(WORDLE_WORDS_FILENAME,WORDLE_WORDS_FILENAME);
 		newRound(VALID_WORDS_FILENAME, WORDLE_WORDS_FILENAME, NUMBER_GUESSES, WORD_LENGTH);
-		
+
 		this.start();
 		resize();
 	}
