@@ -52,9 +52,7 @@ public class RenderableStack extends RenderableCollection {
 			update();
 		}
 		super.render(g);
-		for (int i = 0; i < stackSlots.size(); i++) {
-			stackSlots.get(i).render(g);
-		}
+		for (int i = 0; i < stackSlots.size(); i++) stackSlots.get(i).render(g);
 	}
 	
 	public RenderableStack addRenderable(RenderableComponent element) {
@@ -88,6 +86,7 @@ public class RenderableStack extends RenderableCollection {
 	public void resizeElements() {
 		if (this.sizing == null) return;
 		this.sizing.resize(this);
+		this.requireRenderUpdate = true;
 	}
 	
 	public RenderableStack setSpacing(Dimension spacing) {
@@ -98,40 +97,29 @@ public class RenderableStack extends RenderableCollection {
 		this.spacing = spacing;
 		if (this.spacing instanceof RelativeDimension)
 			this.dimensionReferences.add(((RelativeDimension) this.spacing).getRelTo());
+
+		this.requireRenderUpdate = true;
 		return this;
 	}
 	
-	public int spacing() {
-		return this.spacing.val();
-	}
-	
-	public Dimension getSpacing() {
-		return this.spacing;
-	}
-	
-	public Sizing getSizing() {
-		return this.sizing;
-	}
+	public int spacing() { return this.spacing.val(); }
+	public Dimension getSpacing() { return this.spacing; }
+	public Sizing getSizing() { return this.sizing; }
 	
 	public RenderableStack setSizing(Sizing sizing) {
 		this.sizing = sizing;
+		this.requireRenderUpdate = true;
 		return this;
 	}
 	
-	public ArrayList<RenderableStackElement> getStackSlots() {
-		return this.stackSlots;
-	}
-	
+	public ArrayList<RenderableStackElement> getStackSlots() { return this.stackSlots; }
 	public boolean hasElement(RenderableComponent element) {
 		for (int i = 0; i < stackSlots.size(); i++)
 			if (stackSlots.get(i).hasChild(element))
 				return true;
 		return false;
 	}
-	
-	public int size() {
-		return this.stackSlots.size();
-	}
+	public int size() { return this.stackSlots.size(); }
 
 	public static class Builder extends RenderableCollection.Builder {
 		protected ArrayList<RenderableStackElement> stackSlots;

@@ -28,6 +28,7 @@ public class RenderableStackElement extends RenderableComponent {
 	}
 	
 	public void joinChild() {
+		this.requireZIndexUpdate = true;
 		child.setContainer(this);
 		child.setX(new StaticDimension(0));
 		child.setY(new StaticDimension(0));

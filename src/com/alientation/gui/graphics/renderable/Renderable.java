@@ -2,8 +2,6 @@ package com.alientation.gui.graphics.renderable;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,14 +20,17 @@ public class Renderable {
 	//The BufferedImage that details this renderable only, dimensions equal to the dimension of this renderable.
 	// Used for z ordering and rendering optimization. Still in development
 	protected BufferedImage render;
-	protected boolean reqUpdate;
+	protected boolean requireRenderUpdate;
+	protected boolean requireZIndexUpdate;
+
 	protected ArrayList<RenderableComponent> subreferences;
 	protected String id;
 	public Renderable(Builder builder) {
 		this.window = builder.window;
 		this.render = builder.render;
 		this.subreferences = builder.subreferences;
-		this.reqUpdate = true;
+		this.requireRenderUpdate = true;
+		this.requireZIndexUpdate = true;
 		this.id = builder.id;
 	}
 	
@@ -41,18 +42,21 @@ public class Renderable {
 	public Renderable(Window window, BufferedImage render) {
 		this.window = window != null ? window : Window.INIT_WINDOW;
 		this.render = render;
-		this.reqUpdate = true;
+		this.requireRenderUpdate = true;
+		this.requireZIndexUpdate = true;
 	}
 	
 	public Renderable addSubreference(RenderableComponent subreference) {
 		this.subreferences.add(subreference);
-		this.reqUpdate = true;
+		this.requireRenderUpdate = true;
+		this.requireZIndexUpdate = true;
 		return this;
 	}
 	
 	public Renderable removeSubreference(RenderableComponent subreference) {
 		this.subreferences.remove(subreference);
-		this.reqUpdate = true;
+		this.requireRenderUpdate = true;
+		this.requireZIndexUpdate = true;
 		return this;
 	}
 	
@@ -90,9 +94,9 @@ public class Renderable {
 	 * no matter their individual states
 	 */
 	public void updateRender() {
-		if (!reqUpdate)
+		if (!requireRenderUpdate)
 			return;
-		reqUpdate = false;
+		requireRenderUpdate = false;
 		render = new BufferedImage(width(),height(),BufferedImage.TYPE_INT_ARGB);
 		Graphics temp = render.createGraphics();
 		for (RenderableComponent r : subreferences)
@@ -100,7 +104,7 @@ public class Renderable {
 	}
 	
 	public void resized() {
-		this.reqUpdate = true;
+		this.requireRenderUpdate = true;
 		for (RenderableComponent r : subreferences)
 			r.resized();
 	}
@@ -121,7 +125,8 @@ public class Renderable {
 	public void setWindow(Window window) {
 		//TODO: resolve potential conflicts that arise from changing the windows
 		this.window = window;
-		this.reqUpdate = true;
+		this.requireRenderUpdate = true;
+		this.requireZIndexUpdate = true;
 	}
 	
 	@Override
@@ -134,136 +139,105 @@ public class Renderable {
 	 * 
 	 * @return Rectangle bounds
 	 */
-	public Rectangle getSafeArea() {
-		return getArea();
-	}
+	public Rectangle getSafeArea() { return getArea(); }
 	
 	/**
 	 * Returns the area bounds
 	 * 
 	 * @return Rectangle bounds
 	 */
-	public Rectangle getArea() {
-		return new Rectangle(x(),y(),width(),height());
-	}
+	public Rectangle getArea() { return new Rectangle(x(),y(),width(),height()); }
 	
 	/**
 	 * Returns the absolute x position of this component relative to the canvas. Initially the renderable base is only contained within the window which is essentially the canvas, so x position is that of the window. Should be 0.
 	 * 
 	 * @return x position
 	 */
-	public int x() {
-		return this.window.getX();
-	}
+	public int x() { return this.window.getX(); }
 	
 	/**
 	 * Returns the relative x position of this component relative to the container. Initially the renderable base is only contained within the window which is essentially the canvas.
 	 * 
 	 * @return relative x position to the container
 	 */
-	public int relX() {
-		return 0;
-	}
+	public int relX() { return 0; }
 	
 	/**
 	 * Returns the x position that marks the start of the safe area depending on the marginX
 	 * 
 	 * @return safe x position
 	 */
-	public int safeX() {
-		return this.window.getX();
-	}
+	public int safeX() { return this.window.getX(); }
 	
 	/**
 	 * Returns the absolute y position of this component relative to the canvas. Initially the renderable base is only contained within the window which is essentially the canvas, so y position is that of the window. Should be 0.
 	 * 
 	 * @return y position
 	 */
-	public int y() {
-		return this.window.getY();
-	}
+	public int y() { return this.window.getY(); }
 	
 	/**
 	 * Returns the relative y position of this component relative to the container. Initially the renderable base is only contained within the window which is essentially the canvas.
 	 * 
 	 * @return relative y position to the container
 	 */
-	public int relY() {
-		return 0;
-	}
+	public int relY() { return 0; }
 	
 	/**
 	 * Returns the y position that marks the start of the safe area depending on the marginY
 	 * 
 	 * @return safe y position
 	 */
-	public int safeY() {
-		return this.window.getY();
-	}
+	public int safeY() { return this.window.getY(); }
 	
 	/**
 	 * Returns the overall width of the renderable
 	 * 
 	 * @return overall width
 	 */
-	public int width() {
-		return this.window.getWidth();
-	}
+	public int width() { return this.window.getWidth(); }
 	
 	/**
 	 * Returns the safe width of the section of this renderable inside the marginX
 	 * 
 	 * @return safe width
 	 */
-	public int safeWidth() {
-		return this.window.getWidth();
-	}
+	public int safeWidth() { return this.window.getWidth(); }
 	
 	/**
 	 * Returns the overall height of this renderable
 	 * 
 	 * @return overall height
 	 */
-	public int height() {
-		return this.window.getHeight();
-	}
+	public int height() { return this.window.getHeight(); }
 	
 	/**
 	 * Returns the safe height of the section of this renderable inside the marginY
 	 * 
 	 * @return safe height
 	 */
-	public int safeHeight() {
-		return this.window.getHeight();
-	}
+	public int safeHeight() { return this.window.getHeight(); }
 	
 	/**
 	 * Returns the marginX of this renderable
 	 * 
 	 * @return marginX
 	 */
-	public int marginX() {
-		return 0;
-	}
+	public int marginX() { return 0; }
 	
 	/**
 	 * Returns the marginY of this renderable
 	 * 
 	 * @return marginY
 	 */
-	public int marginY() {
-		return 0;
-	}
+	public int marginY() { return 0; }
 	
 	/**
 	 * For debugging purposes
 	 * 
 	 * @return component id
 	 */
-	public String id() {
-		return this.id;
-	}
-
+	public String id() { return this.id; }
 
 	public static class Builder {
 		protected Window window;
