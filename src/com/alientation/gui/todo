@@ -26,6 +26,8 @@
     -   Renderables are not rendering, tends to be the first ones
         Or they are being covered up by the JFrames rendering
     /   StackElements are being rendered/updated too much, like WAY too much
+    -   Dimension resizing does not actually rely on dimensions calling resize on their renderable
+        Might be because of improper/nonexistent method of registering sub-renderables to dimensions
 (-) Fix JFrame/Window flickering when resizing/moving the window up
     x   Think it is caused by JFrame rendering without the window container rendering
     -   Actually think it is caused by the renderable, only happens when resizing the window to where

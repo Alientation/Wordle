@@ -36,7 +36,7 @@ public class RenderableComponent extends Renderable {
 	//Whether the component should be rendered
 	protected boolean visible;
 	//Whether any dimensions have been updated
-	protected boolean requireDimensionUpdate = true;
+	protected boolean requireDimensionUpdate = false;
 	protected int zIndex;
 	protected RenderableBackground background;
 	protected RenderableFrame frame;
@@ -100,6 +100,7 @@ public class RenderableComponent extends Renderable {
 		//since the rendering only happens when needed, the dimensionComponent's optimization of only updating the value
 		//when needed is not required necessarily
 		//however it would be nice to still have it
+		System.out.println("Resized + " + this.dimensionReferences.size());
 		for (DimensionComponent d : this.dimensionReferences)
 			d.valueChanged();
 	}
@@ -167,6 +168,7 @@ public class RenderableComponent extends Renderable {
 	public Rectangle getArea() { return new Rectangle(x(),y(),width(),height()); }
 
 	public RenderableComponent setContainer(RenderableComponent container) {
+		if (container == this.container) return this;
 		this.container.removeSubreference(this);
 		this.container = container;
 		this.container.addSubreference(this);
@@ -208,11 +210,10 @@ public class RenderableComponent extends Renderable {
 	public RenderableBackground getBackground() { return background; }
 	public RenderableFrame getFrame() { return frame; }
 
-	//for optimizations, only draw if it requires an update
+	//for optimizations, only draw if it requires an update TODO DOES IT EVEN WORK???
 	public void reqUpdate() {
 		this.requireRenderUpdate = true;
-
-		System.out.println("resized");
+		System.out.println("req update");
 	}
 
 
