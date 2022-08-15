@@ -1,12 +1,5 @@
 package com.alientation.gui.graphics.renderable;
 
-import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.renderable.dimension.Dimension;
-import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
-
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.Collection;
 
 public class RenderableButton extends RenderableComponent {
 	
@@ -27,7 +20,7 @@ public class RenderableButton extends RenderableComponent {
 		}
 
 		public void validate() throws IllegalStateException {
-
+			super.validate();
 		}
 	}
 }

@@ -1,7 +1,6 @@
 package com.alientation.gui.graphics;
 
 import java.awt.Canvas;
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Toolkit;
@@ -145,7 +144,7 @@ public class Window extends Canvas implements Runnable {
 		eventDispatcher = new EventDispatcher(this.renderable);
 		windowRenderer = new WindowRenderer(this);
 
-		renderable = new Renderable.Builder().window(this).build();
+		renderable = new Renderable.Builder().window(this).id("WINDOW").build();
 	}
 	
 	public void resize() {

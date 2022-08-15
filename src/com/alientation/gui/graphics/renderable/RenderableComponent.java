@@ -129,9 +129,11 @@ public class RenderableComponent extends Renderable {
 	}
 
 	public void render(Graphics g) {
+		System.out.print(container.id + " ");
 		super.render(g);
 		g.setColor(background.getColor());
-		g.fillRoundRect(x(), y(), width(), height(), radiusWidth(), radiusHeight());
+		g.fillRect(x(),y(),width(),height());
+		//g.fillRoundRect(x(), y(), width(), height(), radiusWidth(), radiusHeight());
 	}
 
 	public void addDimensionReference(DimensionComponent d) { this.dimensionReferences.add(d); }
@@ -339,7 +341,7 @@ public class RenderableComponent extends Renderable {
 		frame.setRadiusHeight(radiusHeight);
 		requireRenderUpdate = true;
 		requireDimensionUpdate = true;
-		if (frame.getRadiusWidth() instanceof RelativeDimension)
+		if (frame.getRadiusHeight() instanceof RelativeDimension)
 			this.dimensionReferences.add(((RelativeDimension) frame.getRadiusHeight()).getRelTo());
 		return this;
 	}

@@ -1,17 +1,5 @@
 package com.alientation.gui.graphics.renderable.collections.stack;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.renderable.Renderable;
-import com.alientation.gui.graphics.renderable.RenderableComponent;
-import com.alientation.gui.graphics.renderable.RenderableImage;
-import com.alientation.gui.graphics.renderable.Sizing;
-import com.alientation.gui.graphics.renderable.dimension.Dimension;
-import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
 
 public class RenderableDropDownMenu extends RenderableStack {
 
@@ -32,7 +20,7 @@ public class RenderableDropDownMenu extends RenderableStack {
 		}
 
 		public void validate() throws IllegalStateException {
-
+			super.validate();
 		}
 	}
 }
