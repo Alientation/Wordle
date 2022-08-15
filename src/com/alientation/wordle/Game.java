@@ -30,7 +30,7 @@ public class Game extends Window {
 		
 		newMainFrame = new MainFrame(this.renderable);
 		
-		new WordList(VALID_WORDS_FILENAME,VALID_WORDS_FILENAME);
+		new WordList(VALID_WORDS_FILENAME,VALID_WORDS_FILENAME); //load files in separate thread
 		new WordList(WORDLE_WORDS_FILENAME,WORDLE_WORDS_FILENAME);
 		newRound(VALID_WORDS_FILENAME, WORDLE_WORDS_FILENAME, NUMBER_GUESSES, WORD_LENGTH);
 
@@ -41,52 +41,8 @@ public class Game extends Window {
 			}
 		});
 
-		this.start();
 		resize();
-	}
-	
-	/**
-	 * Used whenever there is a need to extract information from other processes
-	 */
-	
-	@Override
-	public void tick() {
-		super.tick();
-	}
-	
-	@Override
-	public void resize() {
-		
-	}
-	
-	@Override
-	public void preRender() {
-		super.preRender();
-	}
-	
-	@Override
-	public void postRender() {
-		super.postRender();
-	}
-	
-	@Override
-	public void render() {
-		super.render();
-	}
-	
-	@Override
-	public synchronized void start() {
-		super.start();
-	}
-	
-	@Override
-	public synchronized void stop() {
-		super.stop();
-	}
-	
-	@Override
-	public void run() {
-		super.run();
+		this.start();
 	}
 	
 	public boolean newRound(String validWordList, String wordleWords, int numberOfGuesses, int wordLength) {

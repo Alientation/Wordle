@@ -2,20 +2,14 @@ package com.alientation.gui.graphics.renderable.collections.stack;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.alientation.gui.graphics.renderable.RenderableComponent;
-import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.renderable.Renderable;
-import com.alientation.gui.graphics.renderable.RenderableImage;
 import com.alientation.gui.graphics.renderable.Sizing;
 import com.alientation.gui.graphics.renderable.collections.RenderableCollection;
 import com.alientation.gui.graphics.renderable.dimension.Dimension;
 import com.alientation.gui.graphics.renderable.dimension.RelativeDimension;
 import com.alientation.gui.graphics.renderable.dimension.StaticDimension;
-import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
 import com.alientation.gui.graphics.renderable.dimension.component.DimensionSafeHeight;
 import com.alientation.gui.graphics.renderable.dimension.component.DimensionSafeWidth;
 
@@ -23,7 +17,7 @@ public class RenderableStack extends RenderableCollection {
 	protected Dimension spacing;
 	
 	//TODO: Use canvas resize events instead
-	private int prevSpacing, prevSafeHeight, prevSafeWidth;
+	private int prevSpacing, prevSafeHeight, prevSafeWidth, previousSize;
 	
 	protected Sizing sizing;
 	protected ArrayList<RenderableStackElement> stackSlots;
@@ -34,6 +28,7 @@ public class RenderableStack extends RenderableCollection {
 		this.spacing = builder.spacing;
 		this.sizing = builder.sizing;
 		this.registerDimensions();
+		this.resizeElements();
 	}
 	
 	public void registerDimensions() {
@@ -44,15 +39,21 @@ public class RenderableStack extends RenderableCollection {
 		this.prevSpacing = spacing.val();
 		this.prevSafeHeight = this.safeHeight();
 		this.prevSafeWidth = this.safeWidth();
+		this.previousSize = stackSlots.size();
 	}
-	
-	public void render(Graphics g) {
-		if (prevSpacing != spacing.val() || prevSafeHeight != safeHeight() || prevSafeWidth != safeWidth()) {
+
+	public void tick() {
+		super.tick();
+		if (prevSpacing != spacing.val() || prevSafeHeight != safeHeight() || prevSafeWidth != safeWidth() ||
+				previousSize != stackSlots.size()) {
 			resizeElements();
 			update();
 		}
+	}
+	
+	public void render(Graphics g) {
 		super.render(g);
-		for (int i = 0; i < stackSlots.size(); i++) stackSlots.get(i).render(g);
+		for (RenderableStackElement stackSlot : stackSlots) stackSlot.render(g);
 	}
 	
 	public RenderableStack addRenderable(RenderableComponent element) {
@@ -87,6 +88,7 @@ public class RenderableStack extends RenderableCollection {
 		if (this.sizing == null) return;
 		this.sizing.resize(this);
 		this.requireRenderUpdate = true;
+		this.requireDimensionUpdate = true;
 	}
 	
 	public RenderableStack setSpacing(Dimension spacing) {
@@ -95,10 +97,10 @@ public class RenderableStack extends RenderableCollection {
 		if (this.spacing instanceof RelativeDimension)
 			this.dimensionReferences.remove(((RelativeDimension) this.spacing).getRelTo());
 		this.spacing = spacing;
+		requireRenderUpdate = true;
+		requireDimensionUpdate = true;
 		if (this.spacing instanceof RelativeDimension)
 			this.dimensionReferences.add(((RelativeDimension) this.spacing).getRelTo());
-
-		this.requireRenderUpdate = true;
 		return this;
 	}
 	
@@ -108,14 +110,15 @@ public class RenderableStack extends RenderableCollection {
 	
 	public RenderableStack setSizing(Sizing sizing) {
 		this.sizing = sizing;
-		this.requireRenderUpdate = true;
+		requireRenderUpdate = true;
+		requireDimensionUpdate = true;
 		return this;
 	}
 	
 	public ArrayList<RenderableStackElement> getStackSlots() { return this.stackSlots; }
 	public boolean hasElement(RenderableComponent element) {
-		for (int i = 0; i < stackSlots.size(); i++)
-			if (stackSlots.get(i).hasChild(element))
+		for (RenderableStackElement stackSlot : stackSlots)
+			if (stackSlot.hasChild(element))
 				return true;
 		return false;
 	}

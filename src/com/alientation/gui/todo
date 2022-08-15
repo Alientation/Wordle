@@ -17,6 +17,9 @@
 (/) Custom Window Renderer Class
     /   Stores the order renderables should be rendered in
     /   window render will just call this render
+(/) Variable TPS and FPS
+    /   Game loop must handle both separately
+    /   Thread sleep must also do the same
 
 
 (-) Fix JFrame/Window flickering when resizing/moving the window up

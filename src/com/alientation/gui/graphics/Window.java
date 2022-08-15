@@ -25,7 +25,7 @@ import com.alientation.gui.graphics.renderable.Renderable;
 public class Window extends Canvas implements Runnable {
 	@Serial
 	private static final long serialVersionUID = 1L;
-	public static final int INIT_WIDTH = 800, INIT_HEIGHT = 1000, INIT_TPS = 60;
+	public static final int INIT_WIDTH = 800, INIT_HEIGHT = 1000, INIT_TPS = 120, INIT_FPS = 60;
 	public static final String INIT_TITLE = "Untitled";
 	public static final String RESOURCE = "res\\";
 	public static final String IMAGES = RESOURCE + "images\\";
@@ -46,8 +46,8 @@ public class Window extends Canvas implements Runnable {
 
 	//run loop
 	protected static final int NANOSECONDS = 1000000000;
-	protected double ns;
-	protected int targetTPS, tps;
+	protected double nsPerTick, nsPerFrame;
+	protected int targetTPS, tps, targetFPS, fps;
 	protected Thread windowThread;
 	protected boolean running;
 	
@@ -57,11 +57,11 @@ public class Window extends Canvas implements Runnable {
 	}
 	
 	public Window(int width, int height, String title, boolean resizable) {
-		this(width,height,title,resizable,true,null,INIT_TPS);
+		this(width,height,title,resizable,true,null,INIT_TPS,INIT_FPS);
 	}
 	
 	public Window(int width, int height, String title, boolean resizable, boolean visible,
-				  BufferedImage icon, int tps) {
+				  BufferedImage icon, int tps, int fps) {
 		if (INIT_WINDOW == null)
 			INIT_WINDOW = this;
 		frame = new JFrame(title);
@@ -77,7 +77,8 @@ public class Window extends Canvas implements Runnable {
 		frame.setIgnoreRepaint(true);
 
 		targetTPS = tps;
-		updateTimeBetweenTicks();
+		targetFPS = fps;
+		updateTimeBetweenUpdates();
 
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -158,21 +159,14 @@ public class Window extends Canvas implements Runnable {
 			resize();
 		}
 		renderable.reorderZIndexing(0);
-		if (updateWindowRenderer) {
+		if (updateWindowRenderer)
 			windowRenderer.update();
-		}
+		renderable.tick();
 	}
 
-	public void updateTimeBetweenTicks() {
-		ns = ((float)NANOSECONDS) / targetTPS;
-	}
-	
-	public void render() {
-		preRender();
-		//this.renderable.render(g);
-		frame.repaint();
-		windowRenderer.render(g);
-		postRender();
+	public void updateTimeBetweenUpdates() {
+		nsPerTick = ((float)NANOSECONDS) / targetTPS;
+		nsPerFrame = ((float) NANOSECONDS) / targetFPS;
 	}
 	
 	public void preRender() {
@@ -182,8 +176,18 @@ public class Window extends Canvas implements Runnable {
 			return;
 		}
 		g = bs.getDrawGraphics();
-		g.setColor(Color.black);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());
+		/*g.setColor(Color.black);
+		g.fillRect(0, 0, this.getWidth(), this.getHeight());*/
+	}
+
+	public void render() {
+		preRender();
+		if (!windowRenderer.render(g)) {
+			g.dispose();
+			return; //no need to show anything, nothing was updated
+		}
+
+		postRender();
 	}
 	
 	public void postRender() {
@@ -220,37 +224,46 @@ public class Window extends Canvas implements Runnable {
 		long lastTime = System.nanoTime();
 		long now;
 		long timer = System.currentTimeMillis();
-		double delta = 0;
+		double deltaTick = 0;
+		double deltaFrame = 0;
 		int numTicks = 0;
+		int numFrames = 0;
 		while(this.running) {
 			now = System.nanoTime();
-			delta += (now - lastTime) / ns;
+			deltaTick += (now - lastTime) / nsPerTick;
+			deltaFrame += (now - lastTime) / nsPerFrame;
 			lastTime = now;
-			while (delta >= 1) {
+			while (deltaTick >= 1) {
 				tick();
-				render();
 				numTicks++;
-				delta--;
+				deltaTick--;
+			}
+
+			while (deltaFrame >= 1) {
+				render();
+				numFrames++;
+				deltaFrame--;
 			}
 
 			//update tps (fps too since they are the same as of right now)
 			if (System.currentTimeMillis() - timer > 1000) {
 				timer += 1000;
 				this.tps = numTicks;
+				this.fps = numFrames;
 				numTicks = 0;
+				numFrames = 0;
 			}
 
 			//so that the cpu doesn't waste resources
-			sync(System.nanoTime(), delta);
+			sync(Math.min(System.nanoTime() + (1f - deltaTick) * nsPerTick,System.nanoTime() + (1f - deltaFrame) * nsPerFrame));
 		}
 		stop();
 	}
 
-	public void sync(long loopStartTime, double delta) {
-		double endTime = loopStartTime + (1f - delta) * ns;
+	public void sync(double endTime) {
 		while (System.nanoTime() < endTime) {
 			try {
-				Thread.sleep(3);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				throw new RuntimeException(e);
 			}
@@ -269,15 +282,19 @@ public class Window extends Canvas implements Runnable {
 		frame.setIconImage(icon);
 	}
 	public int getTargetTPS() { return targetTPS; }
-
 	public void setTargetTPS(int targetTPS) {
 		this.targetTPS = targetTPS;
-		updateTimeBetweenTicks();
+		updateTimeBetweenUpdates();
+	}
+	public int getTargetFPS() { return targetFPS; }
+	public void setTargetFPS(int targetFPS) {
+		this.targetFPS = targetFPS;
+		updateTimeBetweenUpdates();
 	}
 	public int getPrevWidth() { return prevWidth; }
 	public int getPrevHeight() { return prevHeight; }
 	public EventDispatcher getEventDispatcher() { return eventDispatcher; }
-	public double getNs() { return ns; }
+	public double getNsPerTick() { return nsPerTick; }
 	public int getTps() { return tps; }
 	public boolean isRunning() { return running; }
 	public void setUpdateWindowRenderer(boolean updateWindowRenderer) { this.updateWindowRenderer = updateWindowRenderer; }

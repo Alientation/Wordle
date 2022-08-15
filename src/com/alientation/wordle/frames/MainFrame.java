@@ -44,6 +44,7 @@ public class MainFrame {
 				.sizing(Sizing.VERTICAL_EQUAL)
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))
+				.id("KEYBOARD")
 				.build();
 		
 		wordleFrame = new WordleFrame(renderable);

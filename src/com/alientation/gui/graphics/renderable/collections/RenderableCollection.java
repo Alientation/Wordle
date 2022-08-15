@@ -1,16 +1,9 @@
 package com.alientation.gui.graphics.renderable.collections;
 
-import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.Collection;
-
-import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.renderable.Renderable;
 import com.alientation.gui.graphics.renderable.RenderableComponent;
-import com.alientation.gui.graphics.renderable.RenderableImage;
-import com.alientation.gui.graphics.renderable.dimension.Dimension;
-import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
+
+import java.awt.*;
+import java.util.ArrayList;
 
 public class RenderableCollection extends RenderableComponent {
 	
@@ -23,13 +16,17 @@ public class RenderableCollection extends RenderableComponent {
 
 	public RenderableCollection addRenderable(RenderableComponent renderable) {
 		this.renderableElements.add(renderable);
+		this.addSubreference(renderable);
 		this.requireZIndexUpdate = true;
+		this.requireDimensionUpdate = true;
 		return this;
 	}
 	
 	public RenderableCollection removeRenderable(RenderableComponent renderable) {
 		this.renderableElements.remove(renderable);
+		this.removeSubreference(renderable);
 		this.requireZIndexUpdate = true;
+		this.requireDimensionUpdate = true;
 		return this;
 	}
 	

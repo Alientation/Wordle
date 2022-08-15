@@ -21,6 +21,7 @@ public class GuessRowFrame  {
 				.spacing(new StaticDimension(5))
 				.backgroundColor(Color.WHITE)
 				.sizing(Sizing.HORIZONTAL_EQUAL)
+				.id("GUESS-ROW")
 				.build();
 		
 		letters = new LetterFrame[Game.WORD_LENGTH];

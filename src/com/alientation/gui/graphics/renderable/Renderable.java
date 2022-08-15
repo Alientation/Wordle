@@ -2,11 +2,12 @@ package com.alientation.gui.graphics.renderable;
 
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.alientation.gui.graphics.Window;
+import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
 
 /**
  * Base for all renderable objects. All renderables must inherit from this.
@@ -16,28 +17,24 @@ import com.alientation.gui.graphics.Window;
 public class Renderable {
 	//Window that this renderable is contained within
 	protected Window window;
-
-	//The BufferedImage that details this renderable only, dimensions equal to the dimension of this renderable.
-	// Used for z ordering and rendering optimization. Still in development
-	protected BufferedImage render;
 	//whether this renderable needs to update the render because this and/or subreferences were changed visually
-	protected boolean requireRenderUpdate;
+	protected boolean requireRenderUpdate = true;
 	//whether this renderable needs to reorder the z indexes because this and/or subreferences were updated
-	protected boolean requireZIndexUpdate;
+	protected boolean requireZIndexUpdate = true;
 	//allows for the z index to be updated as needed
-	protected boolean dynamicZIndexing;
+	protected boolean dynamicZIndexing = true;
 
 	//RenderableComponents that are contained within the bounds of this renderable
-	protected ArrayList<RenderableComponent> subreferences;
+	protected Set<RenderableComponent> subreferences;
+	//dimensionComponents accessed by this renderable
+	protected Set<DimensionComponent> dimensionReferences;
 
 	//Unique id potentially for later to store and load guis from data files
 	protected String id;
 	public Renderable(Builder<?> builder) {
 		this.window = builder.window;
-		this.render = builder.render;
 		this.subreferences = builder.subreferences;
-		this.requireRenderUpdate = true;
-		this.requireZIndexUpdate = true;
+		this.dimensionReferences = builder.dimensionReferences;
 		this.dynamicZIndexing = builder.dynamicZIndexing;
 		this.id = builder.id;
 	}
@@ -47,11 +44,8 @@ public class Renderable {
 	 * 
 	 * @param window container
 	 */
-	public Renderable(Window window, BufferedImage render) {
+	public Renderable(Window window) {
 		this.window = window != null ? window : Window.INIT_WINDOW;
-		this.render = render;
-		this.requireRenderUpdate = true;
-		this.requireZIndexUpdate = true;
 	}
 	
 	public Renderable addSubreference(RenderableComponent subreference) {
@@ -68,49 +62,29 @@ public class Renderable {
 		return this;
 	}
 	
-	public ArrayList<RenderableComponent> getSubreferences() { return this.subreferences; }
+	public Set<RenderableComponent> getSubreferences() { return this.subreferences; }
 
 	/**
 	 * Dynamically update Z Index if required
 	 */
 	public void reorderZIndexing(int pastZIndex) {
-		if (!requireZIndexUpdate || !dynamicZIndexing)
-			return;
 		this.requireZIndexUpdate = false;
 		for (RenderableComponent renderableComponent : subreferences)
 			renderableComponent.reorderZIndexing(pastZIndex + 1);
 	}
-
-	/**
-	 * TODO: implement
-	 * 
-	 * @return the BufferedImage of this renderable. Used so z ordering can be implemented
-	 */
-	public BufferedImage render() {
-		updateRender();
-		return render;
-	}
 	
 	public void render(Graphics g) {
-		for (RenderableComponent r : subreferences)
+		for (RenderableComponent r : subreferences) {
+			System.out.println(r.id);
 			r.render(g);
-		//g.drawImage(render(),x(), y(), null);
+		}
 	}
-	
-	/**
-	 * TODO optimization
-	 *
-	 * if this renderable requires an update, all sub renderable will also require an update
-	 * no matter their individual states
-	 */
-	public void updateRender() {
-		if (!requireRenderUpdate)
-			return;
-		requireRenderUpdate = false;
-		render = new BufferedImage(width(),height(),BufferedImage.TYPE_INT_ARGB);
-		Graphics temp = render.createGraphics();
-		for (RenderableComponent r : subreferences)
-			temp.drawImage(r.render(), r.x(), r.y(), null);
+
+	public void tick() {
+		//TODO dunno whether to remove requireRenderUpdate, could instead just request that the window redraw
+
+		for (RenderableComponent renderableComponent : subreferences)
+			renderableComponent.tick();
 	}
 	
 	public void resized() {
@@ -271,50 +245,47 @@ public class Renderable {
 	 */
 	public static class Builder<T extends Builder<T>> {
 		protected Window window;
-		protected BufferedImage render;
-		protected ArrayList<RenderableComponent> subreferences;
+		protected Set<RenderableComponent> subreferences;
+		protected Set<DimensionComponent> dimensionReferences;
 		protected String id;
 		protected boolean dynamicZIndexing;
 
 		public Builder() {
-			this.subreferences = new ArrayList<>();
+			this.subreferences = new HashSet<>();
+			this.dimensionReferences = new HashSet<>();
 		}
-
 		public T window(Window window) {
 			this.window = window;
 			return (T) this;
 		}
-
 		public T subreference(RenderableComponent renderable) {
 			subreferences.add(renderable);
 			return (T) this;
 		}
-
 		public T subreferences(Collection<RenderableComponent> renderables) {
 			subreferences.addAll(renderables);
 			return (T) this;
 		}
-
-		public T render(BufferedImage render) {
-			this.render = render;
+		public T dimensionReference(DimensionComponent dc) {
+			this.dimensionReferences.add(dc);
 			return (T) this;
 		}
-
+		public T dimensionReferences(Collection<DimensionComponent> dimensions) {
+			this.dimensionReferences.addAll(dimensions);
+			return (T) this;
+		}
 		public T id(String id) {
 			this.id = id;
 			return (T) this;
 		}
-
 		public T dynamicZIndexing(boolean dynamicZIndexing) {
 			this.dynamicZIndexing = dynamicZIndexing;
 			return (T) this;
 		}
-
 		public Renderable build() throws IllegalStateException {
 			validate();
 			return new Renderable(this);
 		}
-
 		public void validate() throws IllegalStateException {
 			if (id == null)
 				id = "unidentified";

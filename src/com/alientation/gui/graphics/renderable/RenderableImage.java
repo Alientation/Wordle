@@ -49,6 +49,7 @@ public class RenderableImage extends RenderableComponent {
     public void updateImage() {
         BufferedImageOp sampler = new ResampleOp(safeWidth(), safeHeight(), ResampleOp.FILTER_LANCZOS);
         bufferedImage = sampler.filter(originalImage,null);
+        this.requireRenderUpdate = true;
     }
 
     public String getImagePath() {

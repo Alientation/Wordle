@@ -42,9 +42,27 @@ public class WindowRenderer {
         sortedZIndex.sort(Comparator.comparingInt(RenderableComponent::getZIndex));
     }
 
-    public void render(Graphics g) {
-        for (RenderableComponent renderableComponent : sortedZIndex)
-            renderableComponent.render(g);
+    /**
+     * Renders only the renderableComponents after the first one that requires a render update.
+     * Still would want maybe to check to make sure renderable components are within their bounds
+     *
+     * @param g Graphical output
+     * @return Whether a render update was actually required or not
+     */
+    public boolean render(Graphics g) {
+        boolean requiresRenderUpdate = window.renderable.requireRenderUpdate();
+        window.renderable.setRequireRenderUpdate(false);
+        if (requiresRenderUpdate)
+            window.renderable.render(g);
+        for (RenderableComponent renderableComponent : sortedZIndex) {
+            if (renderableComponent.requireRenderUpdate()) {
+                requiresRenderUpdate = true;
+                renderableComponent.setRequireRenderUpdate(false);
+            }
+            if (requiresRenderUpdate)
+                renderableComponent.render(g);
+        }
+        return requiresRenderUpdate;
     }
 
     public Window getWindow() { return window; }

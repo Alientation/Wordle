@@ -22,6 +22,7 @@ public class WordleFrame{
 				.sizing(Sizing.VERTICAL_EQUAL)
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))
+				.id("WORDLE")
 				.build();
 		
 		rows = new GuessRowFrame[Game.NUMBER_GUESSES];

@@ -14,6 +14,7 @@ public class LetterFrame {
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))
 				.backgroundColor(Color.GRAY)
+				.id("LETTER-FRAME")
 				.build());
 	}
 

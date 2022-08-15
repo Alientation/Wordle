@@ -9,11 +9,12 @@ import com.alientation.gui.graphics.renderable.dimension.StaticDimension;
 public class DataFrame {
 	private RenderableComponent renderable;
 	public DataFrame(Renderable container) {
-		setRenderable(new RenderableComponent.Builder()
+		setRenderable(new RenderableComponent.Builder<>()
 				.container(container)
 				.backgroundColor(Color.DARK_GRAY)
 				.marginX(new StaticDimension(5))
 				.marginY(new StaticDimension(5))
+				.id("DATA-FRAME")
 				.build());
 	}
 

@@ -11,6 +11,7 @@ public class SettingFrame{
 		setRenderable(new RenderableComponent.Builder<>()
 				.container(container)
 				.backgroundColor(Color.LIGHT_GRAY)
+				.id("SETTING-FRAME")
 				.build());
 	}
 
