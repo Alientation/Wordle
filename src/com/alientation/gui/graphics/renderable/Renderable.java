@@ -74,10 +74,7 @@ public class Renderable {
 	}
 	
 	public void render(Graphics g) {
-		for (RenderableComponent r : subreferences) {
-			System.out.println(r.id);
-			r.render(g);
-		}
+		System.out.println(id);
 	}
 
 	public void tick() {

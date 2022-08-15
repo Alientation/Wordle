@@ -129,9 +129,9 @@ public class RenderableComponent extends Renderable {
 	}
 
 	public void render(Graphics g) {
+		super.render(g);
 		g.setColor(background.getColor());
 		g.fillRect(x(), y(), width(), height());
-		super.render(g);
 	}
 
 	public void addDimensionReference(DimensionComponent d) { this.dimensionReferences.add(d); }

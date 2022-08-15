@@ -53,7 +53,7 @@ public class RenderableStack extends RenderableCollection {
 	
 	public void render(Graphics g) {
 		super.render(g);
-		for (RenderableStackElement stackSlot : stackSlots) stackSlot.render(g);
+		//for (RenderableStackElement stackSlot : stackSlots) stackSlot.render(g);
 	}
 	
 	public RenderableStack addRenderable(RenderableComponent element) {
@@ -67,6 +67,7 @@ public class RenderableStack extends RenderableCollection {
 				.marginY(new StaticDimension(0))
 				.backgroundColor(Color.WHITE)
 				.child(element)
+				.id("Stack-element")
 				.build();
 		
 		this.stackSlots.add(stackElement);

@@ -32,7 +32,7 @@ public class RenderableStackElement extends RenderableComponent {
 	
 	public void render(Graphics g) {
 		super.render(g);
-		child.render(g);
+		//child.render(g);
 	}
 
 	public static class Builder<T extends Builder<T>> extends RenderableComponent.Builder<T> {

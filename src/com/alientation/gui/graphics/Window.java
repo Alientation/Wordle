@@ -186,7 +186,6 @@ public class Window extends Canvas implements Runnable {
 			g.dispose();
 			return; //no need to show anything, nothing was updated
 		}
-
 		postRender();
 	}
 	
