@@ -53,7 +53,6 @@ public class RenderableStack extends RenderableCollection {
 	
 	public void render(Graphics g) {
 		super.render(g);
-		//for (RenderableStackElement stackSlot : stackSlots) stackSlot.render(g);
 	}
 	
 	public RenderableStack addRenderable(RenderableComponent element) {
