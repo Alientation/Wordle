@@ -32,11 +32,14 @@ public class Renderable {
 	//Unique id potentially for later to store and load guis from data files
 	protected String id;
 	public Renderable(Builder<?> builder) {
+		builder.validate();
 		this.window = builder.window;
 		this.subreferences = builder.subreferences;
 		this.dimensionReferences = builder.dimensionReferences;
 		this.dynamicZIndexing = builder.dynamicZIndexing;
 		this.id = builder.id;
+		if (this.id.equals("unidentified"))
+			System.out.println("CAUGHT");
 	}
 	
 	/**

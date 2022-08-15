@@ -64,9 +64,13 @@ public class RenderableComponent extends Renderable {
 		this.eventDispatcher = new EventDispatcher(this);
 		registerDimensions();
 	}
-	
+
+	/**
+	 *
+	 *
+	 */
 	private RenderableComponent() {
-		this(new RenderableComponent.Builder()
+		this(new Builder<>()
 				.container(Window.INIT_WINDOW.getRenderable())
 				.x(new StaticDimension(0))
 				.y(new StaticDimension(0))
@@ -75,6 +79,7 @@ public class RenderableComponent extends Renderable {
 				.marginX(new StaticDimension(0))
 				.marginY(new StaticDimension(0))
 				.backgroundColor(Color.WHITE)
+				.id("BASE-RENDERABLE")
 		);
 	}
 	
@@ -132,8 +137,8 @@ public class RenderableComponent extends Renderable {
 		System.out.print(container.id + " ");
 		super.render(g);
 		g.setColor(background.getColor());
-		g.fillRect(x(),y(),width(),height());
-		//g.fillRoundRect(x(), y(), width(), height(), radiusWidth(), radiusHeight());
+		//g.fillRect(x(),y(),width(),height());
+		g.fillRoundRect(x(), y(), width(), height(), radiusWidth(), radiusHeight());
 	}
 
 	public void addDimensionReference(DimensionComponent d) { this.dimensionReferences.add(d); }

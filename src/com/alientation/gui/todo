@@ -25,8 +25,9 @@
 (-) FIX BUGS
     -   Renderables are not rendering, tends to be the first ones
         Or they are being covered up by the JFrames rendering
-    -   Some renderables are being created without validating their values??
+    /   Some renderables are being created without validating their values??
         RadiusWidth and RadiusHeight are having some problems with being null, same with id
+    /   Find the renderables that are unidentified
     /   StackElements are being rendered/updated too much, like WAY too much
     -   Dimension resizing does not actually rely on dimensions calling resize on their renderable
         Might be because of improper/nonexistent method of registering sub-renderables to dimensions

@@ -17,6 +17,7 @@ public class KeyboardFrame {
 				.spacing(new StaticDimension(5))
 				.backgroundColor(Color.MAGENTA)
 				.sizing(Sizing.VERTICAL_EQUAL)
+				.id("KEYBOARD-FRAME")
 				.build());
 	}
 
