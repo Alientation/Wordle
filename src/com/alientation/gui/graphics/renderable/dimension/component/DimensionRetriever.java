@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import com.alientation.gui.graphics.renderable.Renderable;
 import com.alientation.gui.graphics.renderable.dimension.Dimension;
 
-public class DimensionComponent {
+public class DimensionRetriever {
 	protected Renderable container;
 	protected ArrayList<Dimension> subreferences; //propagate changes to avoid constant checking - might still wanna do a refresh update every half or so seconds
 	
-	public DimensionComponent(Renderable container) {
+	public DimensionRetriever(Renderable container) {
 		this.container = container;
 		this.subreferences = new ArrayList<>();
 		valueChanged();

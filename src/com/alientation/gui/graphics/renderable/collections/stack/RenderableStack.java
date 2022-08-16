@@ -94,13 +94,9 @@ public class RenderableStack extends RenderableCollection {
 	public RenderableStack setSpacing(Dimension spacing) {
 		this.spacing.unregister(this);
 		spacing.register(this);
-		if (this.spacing instanceof RelativeDimension)
-			this.dimensionReferences.remove(((RelativeDimension) this.spacing).getRelTo());
 		this.spacing = spacing;
 		requireRenderUpdate = true;
 		requireDimensionUpdate = true;
-		if (this.spacing instanceof RelativeDimension)
-			this.dimensionReferences.add(((RelativeDimension) this.spacing).getRelTo());
 		return this;
 	}
 	

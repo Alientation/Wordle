@@ -2,7 +2,7 @@ package com.alientation.gui.graphics.renderable.dimension.component;
 
 import com.alientation.gui.graphics.renderable.Renderable;
 
-public class DimensionSafeWidth extends DimensionComponent{
+public class DimensionSafeWidth extends DimensionRetriever {
 	public DimensionSafeWidth(Renderable container) {
 		super(container);
 	}

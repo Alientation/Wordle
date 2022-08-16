@@ -141,6 +141,33 @@ public class Window extends Canvas implements Runnable {
 			}
 		});
 
+		frame.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {
+				super.componentResized(e);
+				renderable.setRequireRenderUpdate(true);
+				renderable.resized();
+			}
+
+			@Override
+			public void componentMoved(ComponentEvent e) {
+				super.componentMoved(e);
+				renderable.setRequireRenderUpdate(true);
+			}
+
+			@Override
+			public void componentShown(ComponentEvent e) {
+				super.componentShown(e);
+				renderable.setRequireRenderUpdate(true);
+			}
+
+			@Override
+			public void componentHidden(ComponentEvent e) {
+				super.componentHidden(e);
+				renderable.setRequireRenderUpdate(true);
+			}
+		});
+
 		eventDispatcher = new EventDispatcher(this.renderable);
 		windowRenderer = new WindowRenderer(this);
 
@@ -158,8 +185,10 @@ public class Window extends Canvas implements Runnable {
 			resize();
 		}
 		renderable.reorderZIndexing(0);
-		if (updateWindowRenderer)
+		if (updateWindowRenderer) {
 			windowRenderer.update();
+			updateWindowRenderer = false;
+		}
 		renderable.tick();
 	}
 

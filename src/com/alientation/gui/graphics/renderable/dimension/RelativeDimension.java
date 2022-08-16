@@ -4,24 +4,25 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.alientation.gui.graphics.renderable.RenderableComponent;
-import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
+import com.alientation.gui.graphics.renderable.dimension.component.DimensionRetriever;
 
 public class RelativeDimension implements Dimension {
 	private Set<RenderableComponent> subreferences; //renderablecomponents that have this as a dimension
 	
-	private DimensionComponent relTo; //which dimension is this relative to
+	private DimensionRetriever relTo; //which dimension is this relative to
 	private float relVal;
 	private int val;
 	
 	private Dimension min, max;
 	
-	public RelativeDimension(DimensionComponent relTo, float relVal) {
+	public RelativeDimension(DimensionRetriever relTo, float relVal) {
 		this(relTo,relVal,StaticDimension.MIN,StaticDimension.MAX);
 	}
 	
-	public RelativeDimension(DimensionComponent relTo, float relVal, Dimension min,Dimension max) {
+	public RelativeDimension(DimensionRetriever relTo, float relVal, Dimension min, Dimension max) {
 		this.relTo = relTo;
 		this.relVal = relVal;
+		this.relTo.getContainer().addDimensionRelativeToThis(this);
 		this.min = min;
 		this.max = max;
 		this.subreferences = new HashSet<>();
@@ -42,12 +43,14 @@ public class RelativeDimension implements Dimension {
 		this.relVal = relVal;
 		valueChanged();
 	}
-	public void setRelTo(DimensionComponent relTo) {
+	public void setRelTo(DimensionRetriever relTo) {
+		this.relTo.getContainer().removeDimensionRelativeToThis(this);
 		this.relTo = relTo;
+		this.relTo.getContainer().addDimensionRelativeToThis(this);
 		valueChanged();
 	}
 	
-	public DimensionComponent getRelTo() {
+	public DimensionRetriever getRelTo() {
 		return this.relTo;
 	}
 	
@@ -56,7 +59,11 @@ public class RelativeDimension implements Dimension {
 		for (RenderableComponent r : subreferences)
 			r.reqUpdate();
 	}
-	
+
+	/**
+	 *
+	 * @param r	RenderableComponent that has this as a dimension
+	 */
 	public void register(RenderableComponent r) {
 		this.subreferences.add(r);
 	}

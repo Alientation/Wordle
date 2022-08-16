@@ -9,7 +9,7 @@ import java.util.List;
 
 public class WindowRenderer {
     private final Window window;
-    private final List<RenderableComponent> sortedZIndex;
+    private final List<Renderable> sortedZIndex;
 
     public WindowRenderer(Window window) {
         this.window = window;
@@ -20,13 +20,12 @@ public class WindowRenderer {
         this.sortedZIndex.clear();
 
         //bfs through to find all renderables in this window
-        Queue<RenderableComponent> bfs = new LinkedList<>();
-        for (RenderableComponent renderableComponent : window.renderable.getSubreferences())
-            bfs.offer(renderableComponent);
+        Queue<Renderable> bfs = new LinkedList<>();
+        bfs.offer(window.renderable);
 
         Set<Renderable> visitedRenderables = new HashSet<>(); //sanity check, this shouldn't be a problem, but who knows
 
-        RenderableComponent cur;
+        Renderable cur;
         while (!bfs.isEmpty()) {
             cur = bfs.poll();
             if (visitedRenderables.contains(cur)) {
@@ -38,8 +37,11 @@ public class WindowRenderer {
             for (RenderableComponent renderable : cur.getSubreferences())
                 bfs.offer(renderable);
         }
-
-        sortedZIndex.sort(Comparator.comparingInt(RenderableComponent::getZIndex));
+        sortedZIndex.sort(Comparator.comparingInt(Renderable::getZIndex));
+        /*
+        for (Renderable renderable : sortedZIndex) {
+            System.out.println(renderable.id());
+        }*/
     }
 
     /**
@@ -50,21 +52,24 @@ public class WindowRenderer {
      * @return Whether a render update was actually required or not
      */
     public boolean render(Graphics g) {
-        boolean requiresRenderUpdate = window.renderable.requireRenderUpdate();
-        window.renderable.setRequireRenderUpdate(false);
-        if (requiresRenderUpdate)
-            window.renderable.render(g);
-        for (RenderableComponent renderableComponent : sortedZIndex) {
-            if (renderableComponent.requireRenderUpdate()) {
-                requiresRenderUpdate = true;
-                renderableComponent.setRequireRenderUpdate(false);
+        boolean requiredRenderUpdate = false;
+        for (Renderable renderable : sortedZIndex) {
+            if (renderable.requireRenderUpdate()) {
+                requiredRenderUpdate = true;
+                renderable.setRequireRenderUpdate(false);
             }
-            if (requiresRenderUpdate)
-                renderableComponent.render(g);
+            //if (requiredRenderUpdate) TODO FIX BUG - requireRenderUpdate doesn't actually account for everything...
+                //renderable.render(g);
         }
-        return requiresRenderUpdate;
+        if (requiredRenderUpdate) {
+            g.setColor(Color.BLUE);
+            g.fillRect(0,0,window.getWidth(),window.getHeight());
+            for (Renderable renderable : sortedZIndex)
+                renderable.render(g);
+        }
+        return requiredRenderUpdate;
     }
 
     public Window getWindow() { return window; }
-    public List<RenderableComponent> getSortedZIndex() { return sortedZIndex; }
+    public List<Renderable> getSortedZIndex() { return sortedZIndex; }
 }

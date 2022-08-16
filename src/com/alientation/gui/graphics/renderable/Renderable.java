@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.alientation.gui.graphics.Window;
-import com.alientation.gui.graphics.renderable.dimension.component.DimensionComponent;
+import com.alientation.gui.graphics.renderable.dimension.Dimension;
 
 /**
  * Base for all renderable objects. All renderables must inherit from this.
@@ -23,11 +23,12 @@ public class Renderable {
 	protected boolean requireZIndexUpdate = true;
 	//allows for the z index to be updated as needed
 	protected boolean dynamicZIndexing = true;
+	protected int zIndex = 0;
 
 	//RenderableComponents that are contained within the bounds of this renderable
 	protected Set<RenderableComponent> subreferences;
-	//dimensionComponents accessed by this renderable
-	protected Set<DimensionComponent> dimensionReferences;
+	//this renderable's dimensions
+	protected Set<Dimension> dimensionsRelativeToThis;
 
 	//Unique id potentially for later to store and load guis from data files
 	protected String id;
@@ -35,11 +36,9 @@ public class Renderable {
 		builder.validate();
 		this.window = builder.window;
 		this.subreferences = builder.subreferences;
-		this.dimensionReferences = builder.dimensionReferences;
+		this.dimensionsRelativeToThis = builder.dimensionsRelativeToThis;
 		this.dynamicZIndexing = builder.dynamicZIndexing;
 		this.id = builder.id;
-		if (this.id.equals("unidentified"))
-			System.out.println("CAUGHT");
 	}
 	
 	/**
@@ -77,7 +76,7 @@ public class Renderable {
 	}
 	
 	public void render(Graphics g) {
-		System.out.println(id);
+		//System.out.println(id);
 	}
 
 	public void tick() {
@@ -91,6 +90,14 @@ public class Renderable {
 		this.requireRenderUpdate = true;
 		for (RenderableComponent r : subreferences)
 			r.resized();
+
+		//currently the only way for a dimension's value changes is if the overarching window is resized.
+		//need to make it work all the time
+		//since the rendering only happens when needed, the dimensionComponent's optimization of only updating the value
+		//when needed is not required necessarily
+		//however it would be nice to still have it
+		for (Dimension d : this.dimensionsRelativeToThis)
+			d.valueChanged();
 	}
 
 	/**
@@ -236,6 +243,10 @@ public class Renderable {
 	public void setRequireZIndexUpdate(boolean requireZIndexUpdate) { this.requireZIndexUpdate = requireZIndexUpdate; }
 	public boolean doDynamicZIndexing() { return dynamicZIndexing; }
 	public void setDynamicZIndexing(boolean dynamicZIndexing) { this.dynamicZIndexing = dynamicZIndexing; }
+	public void addDimensionRelativeToThis(Dimension d) { this.dimensionsRelativeToThis.add(d); }
+	public void removeDimensionRelativeToThis(Dimension d) { this.dimensionsRelativeToThis.remove(d); }
+	public int getZIndex() { return zIndex; }
+	public void setZIndex(int zIndex) { this.zIndex = zIndex; }
 
 	/**
 	 * How to subclass Builder pattern classes
@@ -246,13 +257,13 @@ public class Renderable {
 	public static class Builder<T extends Builder<T>> {
 		protected Window window;
 		protected Set<RenderableComponent> subreferences;
-		protected Set<DimensionComponent> dimensionReferences;
+		protected Set<Dimension> dimensionsRelativeToThis;
 		protected String id;
 		protected boolean dynamicZIndexing;
 
 		public Builder() {
 			this.subreferences = new HashSet<>();
-			this.dimensionReferences = new HashSet<>();
+			this.dimensionsRelativeToThis = new HashSet<>();
 		}
 		public T window(Window window) {
 			this.window = window;
@@ -266,12 +277,12 @@ public class Renderable {
 			subreferences.addAll(renderables);
 			return (T) this;
 		}
-		public T dimensionReference(DimensionComponent dc) {
-			this.dimensionReferences.add(dc);
+		public T dimensionsRelativeToThis(Dimension dc) {
+			this.dimensionsRelativeToThis.add(dc);
 			return (T) this;
 		}
-		public T dimensionReferences(Collection<DimensionComponent> dimensions) {
-			this.dimensionReferences.addAll(dimensions);
+		public T dimensionsRelativeToThis(Collection<Dimension> dimensions) {
+			this.dimensionsRelativeToThis.addAll(dimensions);
 			return (T) this;
 		}
 		public T id(String id) {

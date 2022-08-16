@@ -38,6 +38,7 @@ public class Game extends Window {
 			@com.alientation.gui.annotations.EventListener
 			public void click(MouseClickedEvent event) {
 				System.out.println("time: " +(event.getInitTime() - System.currentTimeMillis()) + " -> clicked!");
+				renderable.requireRenderUpdate();
 			}
 		});
 

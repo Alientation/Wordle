@@ -16,7 +16,7 @@ public class RenderableBackground {
     }
 
     public RenderableBackground(RenderableComponent container) {
-        this(container, null, Color.WHITE, 1f);
+        this(container, null, Color.ORANGE, 1f);
     }
 
 

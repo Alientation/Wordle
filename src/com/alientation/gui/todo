@@ -1,36 +1,11 @@
-(x) Rework DimensionComponents to simplify repetitive classes
-    -   potentially by making one DimensionComponents class with static objects of DimensionComponents
-        that will return the dimension of a passed object. Will have to refactor Dimension classes too
-        to store subreferences
-
-
-(/) Events, Registering Event Handlers, and Passing Events To Handlers
-(/) Add Key/Mouse input events
-(/) Background
-    /   Background Image
-(/) RenderableImage
-(/) Rework Builder Pattern
-    /   Use Generics to reduce repetitive code
-(/) Z-Indexing
-    /   Allow users to customize the z index of each renderable, while also on adjusting as needed in runtime
-        /   boolean dynamicZIndexing?
-(/) Custom Window Renderer Class
-    /   Stores the order renderables should be rendered in
-    /   window render will just call this render
-(/) Variable TPS and FPS
-    /   Game loop must handle both separately
-    /   Thread sleep must also do the same
-
-(-) REFACTOR INTO MODEL VIEW CONTROLLER FORMAT
-(-) FIX BUGS
-    -   Renderables are not rendering, tends to be the first ones
-        Or they are being covered up by the JFrames rendering
-    /   Some renderables are being created without validating their values??
-        RadiusWidth and RadiusHeight are having some problems with being null, same with id
-    /   Find the renderables that are unidentified
-    /   StackElements are being rendered/updated too much, like WAY too much
-    -   Dimension resizing does not actually rely on dimensions calling resize on their renderable
-        Might be because of improper/nonexistent method of registering sub-renderables to dimensions
+TODO
+(-) REWORK EVENTS
+        Event's listeners
+        -   tree map with priority
+        -   Static final variables for different levels
+            -   aka, internal priority level = 10
+(-) Fix Bugs
+    -
 (-) Fix JFrame/Window flickering when resizing/moving the window up
     x   Think it is caused by JFrame rendering without the window container rendering
     -   Actually think it is caused by the renderable, only happens when resizing the window to where
@@ -48,3 +23,53 @@
 
 (-) Button
 (-) Fonts
+
+
+
+FINISHED
+
+(/) Events, Registering Event Handlers, and Passing Events To Handlers
+(/) Add Key/Mouse input events
+(/) Background
+    /   Background Image
+(/) RenderableImage
+(/) Rework Builder Pattern
+    /   Use Generics to reduce repetitive code
+(/) Z-Indexing
+    /   Allow users to customize the z index of each renderable, while also on adjusting as needed in runtime
+        /   boolean dynamicZIndexing?
+(/) Custom Window Renderer Class
+    /   Stores the order renderables should be rendered in
+    /   window render will just call this render
+(/) Variable TPS and FPS
+    /   Game loop must handle both separately
+    /   Thread sleep must also do the same
+(/) FIX BUGS
+    /   Renderables are not rendering, tends to be the first ones
+        Or they are being covered up by the JFrames rendering
+    /   Some renderables are being created without validating their values??
+        RadiusWidth and RadiusHeight are having some problems with being null, same with id
+    /   Find the renderables that are unidentified
+    /   StackElements are being rendered/updated too much, like WAY too much
+    /   Dimension resizing does not actually rely on dimensions calling resize on their renderable
+        Might be because of improper/nonexistent method of registering sub-renderables to dimensions
+
+
+CANCELLED
+
+(x) Rework DimensionComponents to simplify repetitive classes
+    -   potentially by making one DimensionComponents class with static objects of DimensionComponents
+        that will return the dimension of a passed object. Will have to refactor Dimension classes too
+        to store subreferences
+(x) REFACTOR INTO MODEL VIEW CONTROLLER FORMAT
+
+    MVC Pattern
+
+    Model - data, no references
+    View - has rendering capabilities, but does not actually 'know' the data
+    Controller - gives the view model's data, keeps it updated on model's data changes, and handles user inputs
+(x) REFORMAT LISTENERS/HANDLERS/EVENT DISPATCHERS
+    https://stackoverflow.com/questions/6270132/create-a-custom-event-in-java
+
+   Each Renderable will have Event objects specific to it
+   Users can then add listeners to each event object

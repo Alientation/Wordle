@@ -4,7 +4,7 @@ package com.alientation.gui.graphics.renderable.dimension.component;
 import com.alientation.gui.graphics.renderable.Renderable;
 import com.alientation.gui.graphics.renderable.collections.stack.RenderableStack;
 
-public class DimensionSpacing extends DimensionComponent{
+public class DimensionSpacing extends DimensionRetriever {
 	public DimensionSpacing(RenderableStack container) {
 		super(container);
 	}
