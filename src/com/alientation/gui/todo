@@ -21,7 +21,7 @@
     /   Game loop must handle both separately
     /   Thread sleep must also do the same
 
-
+(-) REFACTOR INTO MODEL VIEW CONTROLLER FORMAT
 (-) FIX BUGS
     -   Renderables are not rendering, tends to be the first ones
         Or they are being covered up by the JFrames rendering
