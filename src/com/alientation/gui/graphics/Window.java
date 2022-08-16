@@ -50,7 +50,6 @@ public class Window extends Canvas implements Runnable {
 	protected Thread windowThread;
 	protected boolean running;
 	
-	
 	public Window(int width, int height, String title) {
 		this(width,height,title,true);
 	}
@@ -64,7 +63,7 @@ public class Window extends Canvas implements Runnable {
 		if (INIT_WINDOW == null)
 			INIT_WINDOW = this;
 		frame = new JFrame(title);
-		
+
 		frame.setPreferredSize(new Dimension(width,height));
 		frame.setSize(new Dimension(width,height));
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -168,6 +167,7 @@ public class Window extends Canvas implements Runnable {
 			}
 		});
 
+
 		eventDispatcher = new EventDispatcher(this.renderable);
 		windowRenderer = new WindowRenderer(this);
 
@@ -196,28 +196,22 @@ public class Window extends Canvas implements Runnable {
 		nsPerTick = ((float)NANOSECONDS) / targetTPS;
 		nsPerFrame = ((float) NANOSECONDS) / targetFPS;
 	}
-	
-	public void preRender() {
+	public void render() {
+		//prerender
 		bs = this.getBufferStrategy();
 		if (bs == null) {
 			this.createBufferStrategy(3);
 			return;
 		}
-		g = bs.getDrawGraphics();
-		/*g.setColor(Color.black);
-		g.fillRect(0, 0, this.getWidth(), this.getHeight());*/
-	}
 
-	public void render() {
-		preRender();
+		//render
+		g = bs.getDrawGraphics();
 		if (!windowRenderer.render(g)) {
 			g.dispose();
 			return; //no need to show anything, nothing was updated
 		}
-		postRender();
-	}
-	
-	public void postRender() {
+
+		//post render
 		g.dispose();
 		bs.show();
 	}
