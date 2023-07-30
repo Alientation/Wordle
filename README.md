@@ -1,4 +1,4 @@
-# Wordle
+# Wordle (NOT FINISHED)
 A custom GUI libary with Wordle to display it's features
 
 ## Introduction
